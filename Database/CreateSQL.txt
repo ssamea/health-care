@@ -1,0 +1,87 @@
+CREATE TABLE "Client" (
+	"Client_ID"	TEXT NOT NULL,
+	"Password"	TEXT NOT NULL,
+	"Phone_number"	TEXT NOT NULL,
+	"Email"	TEXT NOT NULL,
+	"Name"	TEXT NOT NULL,
+	"Sex"	TEXT NOT NULL,
+	"Age"	INTEGER NOT NULL,
+	PRIMARY KEY("Client_ID")
+)
+
+CREATE TABLE "Board" (
+	"Board_No"	INTEGER NOT NULL,
+	"Title"	TEXT NOT NULL,
+	"Content"	TEXT,
+	"Date"	TEXT NOT NULL,
+	"Hits"	INTEGER NOT NULL,
+	"get"	INTEGER NOT NULL,
+	"Client_ID"	TEXT NOT NULL,
+	FOREIGN KEY("Client_ID") REFERENCES "Client"("Client_ID"),
+	PRIMARY KEY("Board_No" AUTOINCREMENT)
+)
+
+CREATE TABLE "Reply" (
+	"Reply_No"	INTEGER NOT NULL,
+	"Date"	TEXT NOT NULL,
+	"Reply_content"	TEXT NOT NULL,
+	"Board_No"	INTEGER NOT NULL,
+	"Client_ID"	INTEGER NOT NULL,
+	FOREIGN KEY("Client_ID") REFERENCES "Client"("Client_ID"),
+	FOREIGN KEY("Board_No") REFERENCES "Board"("Board_No") ON DELETE CASCADE,
+	PRIMARY KEY("Reply_No" AUTOINCREMENT)
+)
+
+CREATE TABLE "Diet" (
+	"Food_Name"	TEXT NOT NULL,
+	"Type"	INTEGER NOT NULL,
+	"BMI"	NUMERIC NOT NULL,
+	"Sex"	TEXT NOT NULL,
+	"Goal"	TEXT NOT NULL,
+	"Age"	INTEGER NOT NULL,
+	"Count"	INTEGER
+)
+
+CREATE TABLE "Diet_Statistics" (
+	"Food_Name"	TEXT NOT NULL,
+	"Count"	INTEGER NOT NULL,
+	PRIMARY KEY("Food_Name")
+)
+
+CREATE TABLE "Disease" (
+	"Disease_Name"	TEXT NOT NULL,
+	"Disease_Content"	TEXT NOT NULL,
+	"Recommendation"	TEXT NOT NULL,
+	"Client_ID"	TEXT NOT NULL,
+	FOREIGN KEY("Client_ID") REFERENCES "Client"("Client_ID")
+)
+
+CREATE TABLE "Nutrition" (
+	"Nutrition_ID"	INTEGER NOT NULL,
+	"Food_Name"	TEXT NOT NULL,
+	"Cholesterol"	NUMERIC NOT NULL,
+	"Protein"	NUMERIC NOT NULL,
+	"Carbohydrate"	NUMERIC NOT NULL,
+	"Calroie"	NUMERIC NOT NULL,
+	"Fat"	NUMERIC NOT NULL,
+	"Vitamin_A"	NUMERIC NOT NULL,
+	"Vitamin_C"	NUMERIC NOT NULL,
+	"Calcium"	NUMERIC NOT NULL,
+	"Iron_content"	NUMERIC NOT NULL,
+	"Client_ID"	TEXT NOT NULL,
+	PRIMARY KEY("Nutrition_ID" AUTOINCREMENT)
+)
+
+CREATE TABLE "Pedometer" (
+	"Week_Format"	NUMERIC,
+	"Month_Format"	NUMERIC,
+	"Client_ID"	TEXT NOT NULL
+)
+
+CREATE TABLE "AI_trainer" (
+	"Voice_ID"	INTEGER NOT NULL,
+	"Voice_File"	BLOB,
+	"Client_ID"	TEXT,
+	FOREIGN KEY("Client_ID") REFERENCES "Client"("Client_ID"),
+	PRIMARY KEY("Voice_ID" AUTOINCREMENT)
+)
