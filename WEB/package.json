@@ -2,18 +2,22 @@
   "name": "health-care",
   "version": "1.0.0",
   "description": "Making SNS of health-care",
-  "main": "app.js",
+  "author": "",
   "dependencies": {
+    "@babel/core": "^7.12.10",
     "@babel/node": "^7.12.10",
     "@babel/preset-env": "^7.12.11",
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.5",
     "dotenv": "^8.2.0",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "helmet": "^4.3.1",
+    "morgan": "^1.10.0"
   },
   "scripts": {
-    "start": "node app.js"
+    "start": "nodemon --exec babel-node init.js delay 2"
   },
-  "devDependencies": {},
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs"
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  }
 }

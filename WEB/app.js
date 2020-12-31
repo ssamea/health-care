@@ -1,18 +1,24 @@
-const express = require("express");
+import express from "express";
+import morgan from "morgan";
+import helmet from "helmet";
+import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
+import { userRouter } from "./router";
+
 const app = express();
 
-const PORT1 = 806;
-
-const handleListening = (req, res) => {
-  console.log(`Listening on : http://localhost:${PORT1}`);
-};
-
 const handleHome = (req, res) => {
-  res.send("It's home");
+  res.send("It is my Home!");
 };
+
+app.use(cookieParser());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(helmet());
+app.use(morgan("dev"));
 
 app.get("/", handleHome);
 
-app.listen(PORT1, handleListening);
+app.use("/user", userRouter);
 
 export default app;
