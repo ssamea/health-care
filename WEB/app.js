@@ -3,7 +3,10 @@ import morgan from "morgan";
 import helmet from "helmet";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
-import { userRouter } from "./router";
+import boardRouter from "./routers/boardRouter";
+import userRouter from "./routers/userRouter";
+import globalRouter from "./routers/globalRouter";
+import router from "./router";
 
 const app = express();
 
@@ -19,6 +22,8 @@ app.use(morgan("dev"));
 
 app.get("/", handleHome);
 
-app.use("/user", userRouter);
+app.use(router.home, globalRouter);
+app.use(router.users, userRouter);
+app.use(router.board, boardRouter);
 
 export default app;

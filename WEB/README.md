@@ -8,12 +8,12 @@
 
 ## Server
 
-> - Nginx
+> - 미정
 
 ### To-do List
 
 - [ ] Open Server
-- [ ] Set Routers
+- [x] Set Routers
 - [ ] Login
 - [ ] Logout
 - [ ] UserInfo
