@@ -1,11 +1,17 @@
 import express from "express";
 import router from "../router";
+import {
+  board,
+  boardUpload,
+  boardDetail,
+  editBoard,
+} from "../controllers/boardController";
 
 const boardRouter = express.Router();
 
-boardRouter.get(router.board, (req, res) => res.send("Board"));
-boardRouter.get(router.boardUpload, (req, res) => res.send("Upload"));
-boardRouter.get(router.boardDetail, (req, res) => res.send("Detail"));
-boardRouter.get(router.editBoard, (req, res) => res.send("Edit"));
+boardRouter.get(router.board, board);
+boardRouter.get(router.boardUpload, boardUpload);
+boardRouter.get(router.boardDetail, boardDetail);
+boardRouter.get(router.editBoard, editBoard);
 
 export default boardRouter;
