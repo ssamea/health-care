@@ -1,0 +1,2 @@
+const firebase = ("firebase-admin");
+

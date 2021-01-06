@@ -10,11 +10,13 @@ import router from "./router";
 
 const app = express();
 
+app.use(helmet());
 app.set("view engine", "pug");
+app.use("/uploads", express.static("uploads"));
+app.use("/static", express.static("static"));
 app.use(cookieParser()); // 사용자 인증시 필요
 app.use(bodyParser.json()); // 사용자가 웹 사이트로 전달하는 정보 검사
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(helmet());
 app.use(morgan("dev"));
 
 app.use(router.home, globalRouter);

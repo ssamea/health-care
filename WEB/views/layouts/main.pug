@@ -2,11 +2,11 @@ doctype html
 html
     head
         title health
+        link(ref="stylesheet", href="/static/styles.css")
     body
-        header
-            h1 health-care
+        include ../partials/header
         main
             block content
-        footer
-            span &copy; health
+        include ../partials/footer
+        script(src="/static/main.js")
             
