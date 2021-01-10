@@ -1,4 +1,19 @@
-extends layouts/main
+doctype html
+html
+    head
+        title #{siteName}
+        link(rel="stylesheet",
+         href="https://use.fontawesome.com/releases/v5.15.1/css/all.css",
+         integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp",
+         crossorigin="anonymous")
+        i.fas.fa-book-medical
+        ul
+            li
+                a(href=router.login) 로그인
 
-block content
-    p this is home
+    body
+        block content
+        ul
+            li
+                a(href=router.join).body__join Join Us!
+        include ./partials/footer
