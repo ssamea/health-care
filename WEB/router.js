@@ -5,6 +5,7 @@ const HOME = "/";
 const JOIN = "/join";
 const LOGIN = "/login";
 const LOGOUT = "/logout";
+const SEARCH = "/search";
 
 // User Router
 const USERS = "/users";
@@ -23,6 +24,7 @@ const router = {
   join: JOIN,
   login: LOGIN,
   logout: LOGOUT,
+  search: SEARCH,
   users: USERS,
   userDetail: USER_DEATIL,
   editProfile: EDIT_PROFILE,

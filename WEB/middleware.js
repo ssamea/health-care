@@ -5,3 +5,5 @@ export const localsMiddleWare = (req, res, next) => {
   res.locals.router = router;
   next();
 };
+
+export default localsMiddleWare;

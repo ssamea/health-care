@@ -1,4 +1,19 @@
 extends layouts/main
 
 block content
-    p edit ProFile
+    .form-container
+        form(action=`/users${router.editProfile}`, method="post")
+            label(for="avatar") Avater
+            input(type="file", id="avatar", name="avatar")
+            input(type="text", placeholder="닉네임", name="nickname")
+            label
+                input(type="radio", name="sex", value="남성")
+                span 남성
+            label
+                input(type="radio", name="sex", value="여성")
+                span 여성
+            input(type="email", name="email", placeholder="Email")
+            input(type="number", min="50", max="250", name="height", placeholder="키 (단위 : cm)")
+            input(type="number", min="10", max="500", name="weight", placeholder="몸무게 (단위 : kg)")
+            input(type="submit", value="확인")
+        a.form-container__link(href=router.changePassword) Change Password

@@ -14,10 +14,13 @@
 
 - [ ] Open Server
 - [x] Set Routers
-- [ ] Controller
-- [ ] Login
+- [ ] User Controller
+- [ ] Board Controller
+- [ ] Global Controller
+- [ ] Admin Controller
+- [x] Login
 - [ ] Logout
-- [ ] UserInfo
+- [x] UserInfo
 - [ ] Board
 - [ ] Write
 - [ ] Delete
@@ -25,3 +28,4 @@
 - [ ] Notify
 - [ ] Admin
 - [ ] connect DB
+- [x] Search

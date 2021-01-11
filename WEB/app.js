@@ -1,10 +1,10 @@
 import express from "express";
 import morgan from "morgan";
 import helmet from "helmet";
+import cookieParser from "cookie-parser";
+import bodyParser from "body-parser";
 import { localsMiddleWare } from "./middleware";
 import router from "./router";
-import bodyParser from "body-parser";
-import cookieParser from "cookie-parser";
 import boardRouter from "./routers/boardRouter";
 import userRouter from "./routers/userRouter";
 import globalRouter from "./routers/globalRouter";

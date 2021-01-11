@@ -1,5 +1,5 @@
-import app from "./app";
 import dotenv from "dotenv";
+import app from "./app";
 import firebase from "./firebase";
 
 dotenv.config();

@@ -1,6 +1,10 @@
 header.header
     .header__column
-        i.fas.fa-book-medical
+        a(href=router.home)
+            i.fas.fa-book-medical
+    .header__column
+        form(action=router.search, method="get")
+            input(type="text", placeholder="게시글 찾기...", name="search_query")
     .header__column
         ul
             li
