@@ -1,10 +1,10 @@
 import dotenv from "dotenv";
 import app from "./app";
-import firebase from "./firebase";
+import "./FB";
 
 dotenv.config();
 
-console.log(firebase);
+// console.log(firebase);
 
 const PORT = process.env.PORT1;
 

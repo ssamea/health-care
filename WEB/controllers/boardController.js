@@ -1,5 +1,3 @@
-import { boards } from "../db";
-
 export const board = (req, res) =>
   res.render("board", { pageTitle: "게시판", boards });
 export const boardUpload = (req, res) =>

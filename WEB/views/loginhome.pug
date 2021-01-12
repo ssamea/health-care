@@ -1,0 +1,7 @@
+extends layouts/main
+
+block content
+    .boards
+        each item in boards
+            h1=item.title
+            p= item.description
