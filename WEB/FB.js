@@ -16,16 +16,3 @@ admin.initializeApp({
 });
 
 export const db = admin.database();
-console.log(db.ref("https://dailyhealth-6f85c-default-rtdb.firebaseio.com"));
-
-// db.collection("boards")
-//   .get()
-//   .then((snapshot) => {
-//     snapshot.forEach((doc) => {
-//       title: doc.data().title;
-//       description: doc.data().description;
-//     });
-//   })
-//   .catch((err) => {
-//     console.log("Error getting documents", err);
-//   });

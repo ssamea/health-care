@@ -2,6 +2,7 @@ extends layouts/main
 
 block content
     .boards
+        p this is HOME
         each item in boards
-            h1=item.title
-            p= item.description
+            h1= `제목: ${item.title}`
+            p= `내용 : ${item.description}`

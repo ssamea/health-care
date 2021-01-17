@@ -1,4 +1,4 @@
-import { db } from "../FB";
+import { dbService } from "../db";
 
 export const home = (req, res) => res.render("home");
 
@@ -16,16 +16,25 @@ export const search = (req, res) => {
   res.render("search", { searchingBy });
 };
 
-export const loginhome = (req, res) => {
-  const doc = db.collection("boards");
-  const boards = doc.onSnapshot(
-    (docSnapshot) => {
-      console.log(`Received doc snapshot: ${docSnapshot}`);
-    },
-    (err) => {
-      console.log(`Encountered error: ${err}`);
-    }
-  );
-  console.log(boards.doc().title);
+export const loginhome = async (req, res) => {
+  console.log(dbService.collection("boards").get());
+  let boards = [];
+  const getBoards = async () => {
+    const board = dbService.collection("boards");
+    await board.get().then((snapshot) => {
+      snapshot.forEach((doc) => {
+        boards.push({
+          title: doc.data().title,
+          description: doc.data().description,
+        });
+      });
+      console.log(boards);
+    });
+  };
+  // console.log(boards);
+  // console.log(dbService.collection("boards").get("default"));
+  // console.log(board);
+  // console.log(getBoards);-
+  await getBoards();
   res.render("loginhome", { pageTitle: "로그인 후 화면", boards });
 };
