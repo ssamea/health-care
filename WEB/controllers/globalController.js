@@ -17,7 +17,6 @@ export const search = (req, res) => {
 };
 
 export const loginhome = async (req, res) => {
-  console.log(dbService.collection("boards").get());
   let boards = [];
   const getBoards = async () => {
     const board = dbService.collection("boards");
@@ -28,13 +27,8 @@ export const loginhome = async (req, res) => {
           description: doc.data().description,
         });
       });
-      console.log(boards);
     });
   };
-  // console.log(boards);
-  // console.log(dbService.collection("boards").get("default"));
-  // console.log(board);
-  // console.log(getBoards);-
   await getBoards();
   res.render("loginhome", { pageTitle: "로그인 후 화면", boards });
 };
