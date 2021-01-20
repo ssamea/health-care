@@ -1,4 +1,5 @@
 import * as firebase from "firebase/app";
+import "firebase/database";
 import "firebase/auth";
 import admin from "firebase-admin";
 import "firebase/firestore";
@@ -18,5 +19,6 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 export const firebaseInstance = firebase;
+export const realtimeService = firebase.database();
 export const authService = firebase.auth();
 export const dbService = firebase.firestore();

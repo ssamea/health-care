@@ -2,7 +2,8 @@ import express from "express";
 import router from "../router";
 import {
   home,
-  join,
+  getjoin,
+  postjoin,
   login,
   logout,
   search,
@@ -12,7 +13,8 @@ import {
 const globalRouter = express.Router();
 
 globalRouter.get(router.home, home);
-globalRouter.get(router.join, join);
+globalRouter.get(router.join, getjoin);
+globalRouter.post(router.join, postjoin);
 globalRouter.get(router.login, login);
 globalRouter.get(router.logout, logout);
 globalRouter.get(router.search, search);

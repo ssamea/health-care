@@ -8,6 +8,7 @@
     "@babel/node": "^7.12.10",
     "@babel/preset-env": "^7.12.11",
     "@fortawesome/fontawesome-free": "^5.15.1",
+    "alert": "^5.0.10",
     "babel-loader": "^8.2.2",
     "babel-polyfill": "^6.26.0",
     "body-parser": "^1.19.0",
