@@ -1,4 +1,5 @@
-import { dbService } from "../db";
+import { snapshotConstructor } from "firebase-functions/lib/providers/firestore";
+import { dbService, realtimeService } from "../db";
 import router from "../router";
 
 export const board = (req, res) =>
@@ -8,14 +9,20 @@ export const getBoardUpload = (req, res) =>
   res.render("boardUpload", { pageTitle: "게시글 쓰기" });
 export const postBoardUpload = async (req, res) => {
   const {
-    body: { title, description },
+    body: { title, content },
   } = req;
-  const data = {
+  const board = realtimeService.ref("Board").child("BoardData");
+  const postBoard = board.push();
+  postBoard.set({
+    date: Date(),
+    board_No: postBoard.key,
+    comment: "comment",
+    content,
+    get: 0,
+    hit: 0,
+    id: "rrr1234",
     title,
-    description,
-  };
-  const board = dbService.collection("boards");
-  const postBoard = board.doc().set(data);
+  });
   res.redirect(router.loginhome);
 };
 

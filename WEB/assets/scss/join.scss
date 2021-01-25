@@ -1,0 +1,37 @@
+.form-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 80vh;
+  margin: -20px 0 50px;
+  form {
+    max-width: 300px;
+  }
+  div {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    input {
+      border: 1mm solid rgba(0, 0, 0, 0.1);
+      background-color: #eee;
+      width: 95%;
+    }
+  }
+}
+
+.button {
+  width: 50px;
+  height: 30px;
+  background-color: green;
+  color: white;
+  margin-top: 10px;
+}
+
+input:not([type="radio"], [type="submit"]) {
+  background-color: #eee;
+  border: 1mm solid rgba(0, 0, 0, 0.1);
+  padding: 12px 15px;
+  margin: 8px 0;
+  width: 100%;
+}

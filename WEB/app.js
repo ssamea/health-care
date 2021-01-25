@@ -21,6 +21,8 @@ app.use(
 app.set("view engine", "pug");
 app.use("/uploads", express.static("uploads"));
 app.use("/static", express.static("static"));
+app.use("/styles", express.static("styles"));
+app.use("/image", express.static("image"));
 app.use(cookieParser()); // 사용자 인증시 필요
 app.use(bodyParser.json()); // 사용자가 웹 사이트로 전달하는 정보 검사
 app.use(bodyParser.urlencoded({ extended: true }));

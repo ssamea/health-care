@@ -1,0 +1,30 @@
+.header {
+  background-color: green;
+  margin-bottom: 50px;
+  .page-top {
+    color: white;
+    padding: 5px 0px;
+    width: 100%;
+    margin: 0 auto;
+    max-width: 1200px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
+    font-size: 30px;
+    .page-top__column {
+      i {
+        color: white;
+        font-size: 30px;
+      }
+      ul {
+        margin-left: 550px;
+        width: 100%;
+        display: flex;
+        color: white;
+        font-weight: 600;
+        grid-column-end: auto;
+        font-size: 14px;
+      }
+    }
+  }
+}

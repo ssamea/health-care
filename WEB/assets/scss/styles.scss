@@ -1,5 +1,6 @@
-// @import "./config/_variables.scss";
-
-body {
-  background-color: blue;
-}
+@import "./config/_variables.scss";
+@import "./config/reset.scss";
+@import "./main.scss";
+@import "./header.scss";
+@import "./home.scss";
+@import "./join.scss";

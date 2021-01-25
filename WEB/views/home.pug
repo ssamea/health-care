@@ -1,20 +1,28 @@
 doctype html
 html
     head
+        link(rel="stylesheet", type="text/css" href="/../static/styles.css")
         title #{siteName}
         link(rel="stylesheet",
          href="https://use.fontawesome.com/releases/v5.15.1/css/all.css",
          integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp",
          crossorigin="anonymous")
-        a(href=router.home)
-            i.fas.fa-book-medical
-        ul
-            li
-                a(href=router.login) 로그인
 
     body
-        block content
-        ul
-            li
-                a(href=router.join).body__join Join Us!
-        include ./partials/footer
+        header.header
+            .page-top
+                .page-top__column
+                    a(href=router.home)
+                        i.fas.fa-book-medical
+                .page-top__column
+                    ul
+                        li
+                            a(href=router.login) 로그인
+        main
+            block content
+                .page-middle
+                h1 For Your Health
+                    ul
+                        li
+                            a(href=router.join).body__join Join Us!
+            include ./partials/footer

@@ -20,6 +20,19 @@ const config = {
         ],
       },
       {
+        test: /\.(png|jpg|gif)$/i,
+        use: [
+          {
+            loader: "url-loader",
+            options: {
+              limit: 4000,
+              name: "images/[name].[ext]",
+              esModule: false,
+            },
+          },
+        ],
+      },
+      {
         test: /\.(scss)$/,
         use: [
           {
@@ -59,7 +72,7 @@ const config = {
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: "[name].css",
+      filename: "styles.css",
     }),
   ],
 };

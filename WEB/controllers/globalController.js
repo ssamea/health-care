@@ -3,7 +3,9 @@ import router from "../router";
 import alert from "alert";
 import { boardDetail } from "./boardController";
 
-export const home = (req, res) => res.render("home");
+export const home = (req, res) => {
+  res.render("home");
+};
 
 export const getjoin = (req, res) =>
   res.render("join", { pageTitle: "회원가입" });

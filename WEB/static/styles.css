@@ -1,0 +1,251 @@
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline; }
+
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block; }
+
+body {
+  line-height: 1; }
+
+ol,
+ul {
+  list-style: none; }
+
+blockquote,
+q {
+  quotes: none; }
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
+  content: none; }
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0; }
+
+a {
+  all: unset;
+  cursor: pointer; }
+
+*,
+input {
+  box-sizing: border-box; }
+
+input {
+  border: none;
+  box-sizing: border-box; }
+  input:focus, input:active {
+    outline: none; }
+
+html,
+body {
+  height: 100%; }
+
+body {
+  background-color: #f5f5f5;
+  color: black;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-size: 14px; }
+
+main {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  min-height: 70vh; }
+
+.header {
+  background-color: green;
+  margin-bottom: 50px; }
+  .header .header__wrapper {
+    padding: 5px 0px;
+    width: 100%;
+    margin: 0 auto;
+    max-width: 1200px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: center; }
+    .header .header__wrapper .header__column i {
+      color: white;
+      font-size: 30px; }
+    .header .header__wrapper .header__column:nth-child(2) {
+      width: 100%;
+      justify-self: center; }
+    .header .header__wrapper .header__column:last-child {
+      justify-self: end; }
+    .header .header__wrapper .header__column ul {
+      display: flex;
+      color: white;
+      font-weight: 600;
+      text-transform: uppercase; }
+      .header .header__wrapper .header__column ul li:not(:last-child) {
+        margin-right: 15px; }
+    .header .header__wrapper .header__column form {
+      width: 100%; }
+      .header .header__wrapper .header__column form input {
+        padding: 7px 10px;
+        width: 100%;
+        border-radius: 5px;
+        font-size: 14px;
+        color: black;
+        font-weight: 600;
+        max-width: none; }
+        .header .header__wrapper .header__column form input::placeholder {
+          font-weight: 300;
+          color: rgba(0, 0, 0, 0.7); }
+
+.header {
+  background-color: green;
+  margin-bottom: 50px; }
+  .header .page-top {
+    color: white;
+    padding: 5px 0px;
+    width: 100%;
+    margin: 0 auto;
+    max-width: 1200px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
+    font-size: 30px; }
+    .header .page-top .page-top__column i {
+      color: white;
+      font-size: 30px; }
+    .header .page-top .page-top__column ul {
+      margin-left: 550px;
+      width: 100%;
+      display: flex;
+      color: white;
+      font-weight: 600;
+      grid-column-end: auto;
+      font-size: 14px; }
+
+.form-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 80vh;
+  margin: -20px 0 50px; }
+  .form-container form {
+    max-width: 300px; }
+  .form-container div {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); }
+    .form-container div input {
+      border: 1mm solid rgba(0, 0, 0, 0.1);
+      background-color: #eee;
+      width: 95%; }
+
+.button {
+  width: 50px;
+  height: 30px;
+  background-color: green;
+  color: white;
+  margin-top: 10px; }
+
+input:not([type="radio"], [type="submit"]) {
+  background-color: #eee;
+  border: 1mm solid rgba(0, 0, 0, 0.1);
+  padding: 12px 15px;
+  margin: 8px 0;
+  width: 100%; }
+

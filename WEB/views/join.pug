@@ -6,16 +6,14 @@ block content
             input(type="email", name="email", placeholder="Email")
             input(type="password", name="password", placeholder="password")
             input(type="password", name="password2", placeholder="Re-password")
-            label
-                input(type="radio", name="sex", value="남성")
-                span 남성
-            label
-                input(type="radio", name="sex", value="여성")
-                span 여성
-            input(type="number", min="0", max="120", name="age", placeholder="나이")
-            input(type="number", min="50", max="250", name="height", placeholder="키 (단위 : cm)")
-            input(type="number", min="10", max="500", name="weight", placeholder="몸무게 (단위 : kg)")
-            input(type="submit", value="확인")
+            input(type="radio", name="sex", value="남성")
+            label(for="남성") 남성
+            input(type="radio", name="sex", value="여성")
+            label(for="여성") 여성
+            div
+                input(type="number", min="0", max="120", name="age", placeholder="나이")
+                input(type="number", min="50", max="250", name="height", placeholder="키")
+                input(type="number", min="10", max="500", name="weight", placeholder="몸무게")
+        input(type="submit", value="확인", class="button")
         
-        include ./partials/socialLogin
-            
+        //- include ./partials/socialLogin
