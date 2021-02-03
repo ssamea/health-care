@@ -2,7 +2,7 @@ extends layouts/main
 
 block content
     .form-container
-        form(action=`/board${router.boardUpload}`, method="post")
+        form(action=`/board${router.boardUpload}`, method="post", enctype="multipart/form-data")
             input(type="text", placeholder="제목", name="title", required=true)
             textarea(type="text", placeholder="내용", name="content", required=true)
-            input(type="submit", value="Upload Video")
+            input(type="submit", value="등록")

@@ -8,7 +8,15 @@ header.header
                 input(type="text", placeholder="게시글 찾기...", name="search_query")
         .header__column
             ul
-                li
-                    a(href=router.join) 회원가입
-                li
-                    a(href=router.login) 로그인
+                if !user.isLoggedin
+                    li
+                        a(href=router.join) 회원가입
+                    li
+                        a(href=router.login) 로그인
+                else
+                    li
+                        a(href=`/board${router.boardUpload}`) 업로드
+                    li
+                        a(href=router.userDetail) 내 계정
+                    li
+                        a(href=router.logout) 로그아웃

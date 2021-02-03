@@ -4,7 +4,8 @@ import {
   home,
   getjoin,
   postjoin,
-  login,
+  getlogin,
+  postlogin,
   logout,
   search,
   loginhome,
@@ -15,7 +16,8 @@ const globalRouter = express.Router();
 globalRouter.get(router.home, home);
 globalRouter.get(router.join, getjoin);
 globalRouter.post(router.join, postjoin);
-globalRouter.get(router.login, login);
+globalRouter.get(router.login, getlogin);
+globalRouter.post(router.login, postlogin);
 globalRouter.get(router.logout, logout);
 globalRouter.get(router.search, search);
 globalRouter.get(router.loginhome, loginhome);
