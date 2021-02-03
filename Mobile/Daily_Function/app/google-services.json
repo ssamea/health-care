@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "536591244877",
+    "project_id": "dailyhealth-6f85c",
+    "storage_bucket": "dailyhealth-6f85c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:536591244877:android:0f391786c185c9a6804604",
+        "android_client_info": {
+          "package_name": "com.example.daily_functions"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "536591244877-174g7o9pogc4t4aa81mu4kbhkpp6u8u5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVy7l5Krg-8ZbDHjiOomv5BVVdDEoesmk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "536591244877-174g7o9pogc4t4aa81mu4kbhkpp6u8u5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

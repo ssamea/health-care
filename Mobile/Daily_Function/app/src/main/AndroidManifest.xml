@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.daily_function">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-feature android:name="android.hardware.camera" android:required="true"/>
+
+
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".foodSelectDessert"></activity>
+        <activity android:name=".foodSelectLaunch" />
+        <activity android:name=".foodSelectDinner" />
+        <activity android:name=".DinnerSearch" />
+        <activity android:name=".LaunchSearch" />
+        <activity android:name=".DessertSearch" />
+        <activity android:name=".Board" />
+        <activity android:name=".AiExercise" />
+        <activity android:name=".DiseaseInfo" />
+        <activity android:name=".AiRecomand" />
+        <activity android:name=".DetailPedometer" />
+        <activity android:name=".FoodInput" />
+        <activity android:name=".RegisterActivity" />
+        <activity android:name=".MainActivity" />
+        <activity android:name=".ProfileChangeActivity" />
+        <activity android:name=".ProfileInfoActivity" />
+        <activity android:name=".FindPassActivity" />
+        <activity
+            android:name=".Search"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".DetailFoodInfo" />
+        <activity android:name=".foodSelect" />
+        <activity android:name=".LoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name=".StepCheckServices"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE">
+            <intent-filter>
+                <action android:name="app.manbo.Service" />
+            </intent-filter>
+        </service>
+
+        <receiver
+            android:name=".MainActivity"
+            android:enabled="true"
+            android:exported="false"
+            android:label="STARTReceiver">
+            <intent-filter>
+                <action android:name="app.manbo.Service" />
+            </intent-filter>
+        </receiver>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.daily_function.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+
+        </provider>
+
+    </application>
+
+</manifest>

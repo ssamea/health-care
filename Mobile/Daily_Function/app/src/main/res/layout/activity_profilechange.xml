@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ProfileChangeActivity"
+    android:background="#ffffff">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="170dp"
+            android:src="@drawable/logo"/>
+    </LinearLayout>
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TableRow
+            android:gravity="center_horizontal">
+            <TextView
+                android:text="이름 : "
+                android:textSize="20dp"
+                />
+            <EditText
+                android:id="@+id/name"
+                android:hint="이름을 입력하세요."
+                android:textSize="15dp"
+                android:inputType="text"/>
+        </TableRow>
+
+        <TableRow
+            android:gravity="center_horizontal">
+            <TextView
+                android:text="키 : "
+                android:textSize="20dp"/>
+            <EditText
+                android:id="@+id/height"
+                android:hint="키를 입력하세요."
+                android:textSize="15dp"
+                android:inputType="text"/>
+        </TableRow>
+        <TableRow
+            android:gravity="center_horizontal">
+            <TextView
+                android:text="몸무게 : "
+                android:textSize="20dp"/>
+            <EditText
+                android:id="@+id/weight"
+                android:hint="몸무게를 입력하세요."
+                android:textSize="15dp"
+                android:inputType="text"/>
+        </TableRow>
+
+        <TableRow
+            android:gravity="center_horizontal">
+            <TextView
+                android:text="성별 : "
+                android:textSize="20dp"/>
+            <RadioGroup
+                android:id="@+id/radioGroup1"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checkedButton="@+id/man"
+
+                >
+
+                <RadioButton
+                    android:id="@+id/man"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="남" />
+
+                <RadioButton
+                    android:id="@+id/woman"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="여" />
+            </RadioGroup>
+
+        </TableRow>
+        <TableRow
+            android:gravity="center_horizontal">
+            <TextView
+                android:text="나이 : "
+                android:textSize="20dp"/>
+            <EditText
+                android:id="@+id/age"
+                android:hint="나이를 입력하세요."
+                android:textSize="15dp"
+                android:inputType="text"/>
+        </TableRow>
+    </TableLayout>
+    <LinearLayout
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageButton
+            android:id="@+id/change"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/register"
+            android:scaleType="centerCrop"
+            android:padding="0sp"/>
+        <ImageButton
+            android:id="@+id/cancel_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/cancel"
+            android:scaleType="centerCrop"
+            android:padding="0sp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_marginBottom="0dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
+        <ImageView
+            android:id="@+id/botm"
+            android:src="@drawable/botm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
+            android:padding="0sp"/>
+    </LinearLayout>
+</LinearLayout>
