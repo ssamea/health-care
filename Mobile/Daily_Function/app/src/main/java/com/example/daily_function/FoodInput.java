@@ -76,15 +76,30 @@ public class FoodInput extends AppCompatActivity {
 
         mDatabase=FirebaseDatabase.getInstance(); //디비 연결
 
+        //여기 문제임. dataSnapshot.child(email_id)에서 기존 데이터가 없으면 null로 떠버림. 그래서 고쳐봣는데 아예 넘어가버림. 뭐가 이상함
         //아침용
         mReference1=mDatabase.getReference("MorningFood");
         mReference1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot myData : dataSnapshot.getChildren()) { ////values에 데이터를 담는 과정
-                    morningKcal=dataSnapshot.child(email_id).child("Kcal").getValue(Double.class);
-                    Log.d(TAG, "morningKcal: "+morningKcal);
-                    dailyKcal+=morningKcal;
+                    String check=dataSnapshot.child(email_id).child("id").getValue(String.class);
+                   // morningKcal = dataSnapshot.child(email_id).child("Kcal").getValue(Double.class);
+                    if(check==null){
+                        morningKcal=0;
+                        dailyKcal+=0;
+                        integerdailyKcal = (int) Math.round(dailyKcal);
+                        infoKcal.setText(integerdailyKcal + "kcal");
+                        kcalProgressBar.setProgress(integerdailyKcal);
+                    }
+                    if(check!=null && check.equals(email_id)){
+                        morningKcal = dataSnapshot.child(email_id).child("Kcal").getValue(Double.class);
+                        dailyKcal += morningKcal;
+                        integerdailyKcal = (int) Math.round(dailyKcal);
+                        infoKcal.setText(integerdailyKcal + "kcal");
+                        kcalProgressBar.setProgress(integerdailyKcal);
+                    }
+                    Log.d(TAG, "morningKcal: " + morningKcal);
                 }
             }
 
@@ -100,10 +115,24 @@ public class FoodInput extends AppCompatActivity {
         mReference2.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot myData : dataSnapshot.getChildren()) { ////values에 데이터를 담는 과정
-                    LaunchKcal=dataSnapshot.child(email_id).child("Kcal").getValue(Double.class);
-                    Log.d(TAG, "LaunchKcal: "+LaunchKcal);
-                    dailyKcal+=LaunchKcal;
+                for (DataSnapshot myData : dataSnapshot.getChildren()) { ////values에 데이터를 담는 과정.
+                   // LaunchKcal = dataSnapshot.child(email_id).child("Kcal").getValue(Double.class);
+                    String check=dataSnapshot.child(email_id).child("id").getValue(String.class);
+                    if(check==null){
+                        morningKcal=0;
+                        dailyKcal+=0;
+                        integerdailyKcal = (int) Math.round(dailyKcal);
+                        infoKcal.setText(integerdailyKcal + "kcal");
+                        kcalProgressBar.setProgress(integerdailyKcal);
+                    }
+                    if(check!=null && check.equals(email_id)){
+                        LaunchKcal = dataSnapshot.child(email_id).child("Kcal").getValue(Double.class);
+                        dailyKcal += LaunchKcal;
+                        integerdailyKcal = (int) Math.round(dailyKcal);
+                        infoKcal.setText(integerdailyKcal + "kcal");
+                        kcalProgressBar.setProgress(integerdailyKcal);
+                    }
+                    Log.d(TAG, "LaunchKcal: " + LaunchKcal);
                 }
             }
 
@@ -120,8 +149,22 @@ public class FoodInput extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot myData : dataSnapshot.getChildren()) { ////values에 데이터를 담는 과정
-                    dinnerKcal=dataSnapshot.child(email_id).child("fb_Kcal").getValue(Double.class);
-                    dailyKcal+=dinnerKcal;
+                   // dinnerKcal=dataSnapshot.child(email_id).child("fb_Kcal").getValue(Double.class); //문제발생
+                    String check=dataSnapshot.child(email_id).child("fb_client_id").getValue(String.class);
+                    if(check==null){
+                        morningKcal=0;
+                        dailyKcal+=0;
+                        integerdailyKcal = (int) Math.round(dailyKcal);
+                        infoKcal.setText(integerdailyKcal + "kcal");
+                        kcalProgressBar.setProgress(integerdailyKcal);
+                    }
+                    if(check!=null && check.equals(email_id)){
+                        dinnerKcal=dataSnapshot.child(email_id).child("fb_Kcal").getValue(Double.class); //문제발생
+                        dailyKcal += dinnerKcal;
+                        integerdailyKcal = (int) Math.round(dailyKcal);
+                        infoKcal.setText(integerdailyKcal + "kcal");
+                        kcalProgressBar.setProgress(integerdailyKcal);
+                    }
                     Log.d(TAG, "dinnerKcal: "+dinnerKcal);
                 }
             }
@@ -139,13 +182,23 @@ public class FoodInput extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot myData : dataSnapshot.getChildren()) { ////values에 데이터를 담는 과정
-                    dessertKcal=dataSnapshot.child(email_id).child("Kcal").getValue(Double.class);
-                    dailyKcal+=dessertKcal;
-                    integerdailyKcal=(int)Math.round(dailyKcal);
-                    infoKcal.setText(integerdailyKcal+"kcal");
-                    kcalProgressBar.setProgress(integerdailyKcal);
+                  //  dessertKcal=dataSnapshot.child(email_id).child("Kcal").getValue(Double.class);
+                    String check=dataSnapshot.child(email_id).child("id").getValue(String.class);
+                    if(check==null){
+                        dessertKcal=0;
+                        dailyKcal+=0;
+                        integerdailyKcal=(int)Math.round(dailyKcal);
+                        infoKcal.setText(integerdailyKcal+"kcal");
+                        kcalProgressBar.setProgress(integerdailyKcal);
+                    }
+                    if(check!=null && check.equals(email_id)){
+                        dessertKcal=dataSnapshot.child(email_id).child("Kcal").getValue(Double.class);
+                        dailyKcal += dessertKcal;
+                        integerdailyKcal = (int) Math.round(dailyKcal);
+                        infoKcal.setText(integerdailyKcal + "kcal");
+                        kcalProgressBar.setProgress(integerdailyKcal);
+                    }
                     Log.d(TAG, "dessertKcal: "+dessertKcal);
-
                 }
                 Intent intent=new Intent(getApplicationContext(), MainActivity.class);
                 Log.d(TAG,"integerdailyKcal:"+integerdailyKcal);
@@ -160,8 +213,10 @@ public class FoodInput extends AppCompatActivity {
 
         });
 
+
         int integerdailyKcal=(int)Math.round(dailyKcal);
         Log.d(TAG, "integerdailyKcal: "+integerdailyKcal);
+
 
 
 

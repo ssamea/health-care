@@ -148,10 +148,10 @@ public class foodSelectDinner extends AppCompatActivity {
                 firebaseFoodInput post = new firebaseFoodInput(email_id,"저녁",format_time,totalCalcium,totalCarbon,totalFat,totalIron,totalFiber,totalSugar,totalVitaminC,totalVitaminB1,totalVitaminB2,totalKcal,totalNa,totalProtein );
                 proValues = post.toMap();
 
-               // childUpdates.put("/FoodInput/" + email_id, proValues);
-              //  PReference.updateChildren(childUpdates);
-              //  PReference.child("FoodDinner").child(email_id).setValue(post);
-                PReference.child("FoodDinner").child(email_id).push().setValue(post);
+                childUpdates.put("/FoodInput/" + email_id, proValues);
+                PReference.updateChildren(childUpdates);
+                PReference.child("FoodDinner").child(email_id).setValue(post);
+           //     PReference.child("FoodDinner").child(email_id).push().setValue(post);
 
                 Intent intent = new Intent(this, FoodInput.class);
                 startActivity(intent);

@@ -87,7 +87,6 @@ public class Search extends AppCompatActivity {
                         .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>(){
                     @Override
                     public void onSuccess(QuerySnapshot  documentSnapshots) {
-
                         if (documentSnapshots.isEmpty()) {
                             Log.d(TAG, "onSuccess: LIST EMPTY");
                             return;
@@ -98,7 +97,6 @@ public class Search extends AppCompatActivity {
                             for (DocumentSnapshot document: documentSnapshots){
                                 if(document.getString("Foodname").contains(str_search)){
                                     Log.d(TAG,"getname:"+document.getString("Foodname"));
-
                                     Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                                     food foodinfo = document.toObject(food.class);// 만들어뒀던 food 클래스의 객체 변수에 데이터 담기
                                     arrayList.add(foodinfo); //리스트에 파이어스토어 데이터담고 리사이클러뷰에 보낼 준비.

@@ -73,8 +73,6 @@ public class DinnerSearch extends AppCompatActivity {
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-
-
         // 검색을 클릭하면 editText의 값을 통해 디비를 조회하는 기능
         btn.setOnClickListener(new View.OnClickListener() {
             @Override

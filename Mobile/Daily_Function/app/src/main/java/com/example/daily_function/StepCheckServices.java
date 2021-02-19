@@ -34,6 +34,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class StepCheckServices extends Service implements SensorEventListener {
@@ -67,11 +69,12 @@ public class StepCheckServices extends Service implements SensorEventListener {
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     private DatabaseReference PReference = firebaseDatabase.getReference();
 
+
     //날짜 비교를 위한 변수들
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     String today=null;
 
-    String dt = "2021-01-26"; //오늘 날짜와 비교하기 위한 변수
+    String dt = "2021-02-16"; //오늘 날짜와 비교하기 위한 변수
     SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd");
     Calendar c;
 
@@ -138,7 +141,7 @@ public class StepCheckServices extends Service implements SensorEventListener {
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
             long currentTime = System.currentTimeMillis();
             long gabOfTime = (currentTime - lastTime);
-            PReference = firebaseDatabase.getInstance().getReference();
+           // PReference = firebaseDatabase.getInstance().getReference();
 
             if (gabOfTime > 100) { //  gap of time of step count
                 Log.i("onSensorChanged_IF", "FIRST_IF_IN");
@@ -155,11 +158,6 @@ public class StepCheckServices extends Service implements SensorEventListener {
                 // 임계값보다 크게 움직였을 경우 다음을 수행
                 if (speed > SHAKE_THRESHOLD) {
                     Log.i("onSensorChanged_IF", "SECOND_IF_IN");
-                    //Intent myFilteredResponse = new Intent("com.example.daily_function"); //sendBroad()로 뺌
-
-                    //아래 if문으로 옮김
-                    //StepValue.Step = count++;
-                    //Notification_info();
 
                     //여기에서 날짜를 계산 해야할 듯.
                     today=dateFormat.format(new Date()); //오늘 날짜 가져오기
@@ -172,22 +170,7 @@ public class StepCheckServices extends Service implements SensorEventListener {
 
                     }
 
-                    /* sendBroad()로 뺌
-                    String msg = StepValue.Step / 2 + ""; //발걸음 메인액티비티 결과값 파싱
-                    String dist_msg = getDistanceRun(StepValue.Step/2) + "km"; // 이동거리
-                    String kcal_msg = getCalorie(StepValue.Step)+"kcal"; //칼로리
-                    String prog_msg= StepValue.Step/2+"";
 
-                    // 발걸음과, 이동거리 2개다 넣기
-                    myFilteredResponse.putExtra("stepService", msg);
-                    myFilteredResponse.putExtra("kcalService", kcal_msg);
-                    myFilteredResponse.putExtra("distService", dist_msg);
-                    myFilteredResponse.putExtra("progService", prog_msg);
-
-                    // 발걸음 브로드 캐스트
-                    sendBroadcast(myFilteredResponse);
-
-                     */
                     else { //같지 않다면
                         c = Calendar.getInstance();
                         StepValue.Step=0;
@@ -239,8 +222,38 @@ public class StepCheckServices extends Service implements SensorEventListener {
         myFilteredResponse.putExtra("distService", dist_msg);
         myFilteredResponse.putExtra("progService", prog_msg);
 
+
+        Notification_info();
         // 발걸음 브로드 캐스트
         sendBroadcast(myFilteredResponse);
+
+        //파베에 갱신
+        SimpleDateFormat format;
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        String email = user.getEmail(); //현재 유저 이메일(아이디) 가져오기
+        int s= email.indexOf("@");
+        String email_id=email.substring(0,s);
+        //입력데이터 Map으로 변환후 업데이트
+        Map<String, Object> childUpdates = new HashMap<>();
+        Map<String, Object> proValues = null;
+
+        format=new SimpleDateFormat ( "yyyy-MM-dd");
+        String format_time = format.format (System.currentTimeMillis());
+
+        mDatabase=FirebaseDatabase.getInstance(); //디비 연결
+
+
+
+        //이거 다중선택해하는 경우 있으니 위 oncreate에서 total kcal처럼 노가다해야함.
+        firebasePedometer post = new firebasePedometer(email_id,format_time,steps/2);
+        proValues = post.toMap();
+
+         childUpdates.put("/DailyPedometer/" + email_id, proValues);
+         PReference.updateChildren(childUpdates);
+
+         PReference.child("DailyPedometer").child(email_id).setValue(post);
+        //PReference.child("DailyPedometer").child(email_id).push().setValue(post);
+
 
     }
 

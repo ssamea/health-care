@@ -86,6 +86,7 @@ public class ProfileInfoActivity extends AppCompatActivity implements View.OnCli
                 for (DataSnapshot Data : dataSnapshot.getChildren()) {
                     // child 내에 있는 데이터만큼 반복합니다.
 
+
                     Profile pro = Data.getValue(Profile.class);
                     String rid=pro.getId();
 
