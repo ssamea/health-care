@@ -74,7 +74,7 @@ public class StepCheckServices extends Service implements SensorEventListener {
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     String today=null;
 
-    String dt = "2021-02-16"; //오늘 날짜와 비교하기 위한 변수
+    String dt = "2021-02-25"; //오늘 날짜와 비교하기 위한 변수
     SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd");
     Calendar c;
 
