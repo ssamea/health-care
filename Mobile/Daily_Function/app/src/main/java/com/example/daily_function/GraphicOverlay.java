@@ -65,9 +65,9 @@ public class GraphicOverlay extends View {
   private boolean needUpdateTransformation = true;
 
   /**
-   * Base class for a custom graphics object to be rendered within the graphic overlay. Subclass
-   * this and implement the {@link Graphic#draw(Canvas)} method to define the graphics element. Add
-   * instances to the overlay using {@link GraphicOverlay#add(Graphic)}.
+   * 그래픽 오버레이 내에서 렌더링되는 사용자 정의 그래픽 객체의 기본 클래스.
+   * 이를 하위 클래스로 만들고 {@link Graphic # draw (Canvas)} 메서드를 구현하여 그래픽 요소를 정의
+   * {@link GraphicOverlay # add (Graphic)}를 사용하여 오버레이에 인스턴스를 추가
    */
   public abstract static class Graphic {
     private GraphicOverlay overlay;
@@ -77,8 +77,7 @@ public class GraphicOverlay extends View {
     }
 
     /**
-     * Draw the graphic on the supplied canvas. Drawing should use the following methods to convert
-     * to view coordinates for the graphics that are drawn:
+     *제공된 캔버스에 그래픽을 그리기. 그리기는 다음 방법을 사용하여 그려진 그래픽의보기 좌표로 변환해야함.
      *
      * <ol>
      *   <li>{@link Graphic#scale(float)} adjusts the size of the supplied value from the image

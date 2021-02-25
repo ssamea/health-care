@@ -16,13 +16,18 @@
 
 package com.example.daily_function.posedetector;
 
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
+import android.util.Log;
+import android.widget.Toast;
+
 import androidx.annotation.Nullable;
 import com.example.daily_function.GraphicOverlay;
 import com.example.daily_function.GraphicOverlay.Graphic;
+import com.example.daily_function.InferenceInfoGraphic;
 import com.google.mlkit.vision.pose.Pose;
 import com.google.mlkit.vision.pose.PoseLandmark;
 import java.util.List;
@@ -41,6 +46,11 @@ public class PoseGraphic extends Graphic {
   private final Paint leftPaint;
   private final Paint rightPaint;
   private final Paint whitePaint;
+  int cnt=0;
+
+  private static final int TEXT_COLOR = Color.WHITE;
+  public static final float TEXT_SIZE = 60.0f;
+  private Paint textPaint;
 
   PoseGraphic(GraphicOverlay overlay, Pose pose, boolean showInFrameLikelihood) {
     super(overlay);
@@ -55,10 +65,17 @@ public class PoseGraphic extends Graphic {
     leftPaint.setColor(Color.GREEN);
     rightPaint = new Paint();
     rightPaint.setColor(Color.YELLOW);
+
+    textPaint = new Paint();
+    textPaint.setColor(TEXT_COLOR);
+    textPaint.setTextSize(TEXT_SIZE);
   }
 
   @Override
   public void draw(Canvas canvas) {
+    float x = TEXT_SIZE * 1.5f;
+    float y = TEXT_SIZE * 1.5f;
+
     List<PoseLandmark> landmarks = pose.getAllPoseLandmarks();
     if (landmarks.isEmpty()) {
       return;
@@ -125,11 +142,92 @@ public class PoseGraphic extends Graphic {
     drawLine(canvas, rightAnkle.getPosition(), rightHeel.getPosition(), rightPaint);
     drawLine(canvas, rightHeel.getPosition(), rightFootIndex.getPosition(), rightPaint);
 
+
+
+    double rightElbowAngle = getAngle(
+            pose.getPoseLandmark(PoseLandmark.Type.RIGHT_WRIST),
+            pose.getPoseLandmark(PoseLandmark.Type.RIGHT_ELBOW),
+            pose.getPoseLandmark(PoseLandmark.Type.RIGHT_SHOULDER));
+    Log.d("PoseGraphic.class", "rightElbowAngle11 각도: " + rightElbowAngle);
+
+    double leftElbowAngle = getAngle(
+            pose.getPoseLandmark(PoseLandmark.Type.LEFT_WRIST),
+            pose.getPoseLandmark(PoseLandmark.Type.LEFT_ELBOW),
+            pose.getPoseLandmark(PoseLandmark.Type.LEFT_SHOULDER));
+    Log.d("PoseGraphic.class", "leftElbowAngle11 각도: " + leftElbowAngle);
+
+
+    //스쿼트 내력갈때 옆모습일경우 무릎각도
+    double rightKneeAngle = getAngle(
+            pose.getPoseLandmark(PoseLandmark.Type.RIGHT_HIP),
+            pose.getPoseLandmark(PoseLandmark.Type.RIGHT_KNEE),
+            pose.getPoseLandmark(PoseLandmark.Type.RIGHT_ANKLE));
+
+
+    double leftKneeAngle = getAngle(
+            pose.getPoseLandmark(PoseLandmark.Type.LEFT_HIP),
+            pose.getPoseLandmark(PoseLandmark.Type.LEFT_KNEE),
+            pose.getPoseLandmark(PoseLandmark.Type.LEFT_ANKLE));
+
+    //스쿼트 내려갈때 정면일 경우 엉덩이 각도
     double rightHipAngle = getAngle(
             pose.getPoseLandmark(PoseLandmark.Type.RIGHT_SHOULDER),
             pose.getPoseLandmark(PoseLandmark.Type.RIGHT_HIP),
             pose.getPoseLandmark(PoseLandmark.Type.RIGHT_KNEE));
 
+    double leftHipAngle = getAngle(
+            pose.getPoseLandmark(PoseLandmark.Type.LEFT_SHOULDER),
+            pose.getPoseLandmark(PoseLandmark.Type.LEFT_HIP),
+            pose.getPoseLandmark(PoseLandmark.Type.LEFT_KNEE));
+    Log.d("PoseGraphic.class","오른쪽 엉덩이 각도:"+rightHipAngle);
+
+    double leftLeg=getDistnce(pose.getPoseLandmark(PoseLandmark.Type.LEFT_HIP),
+            pose.getPoseLandmark(PoseLandmark.Type.LEFT_ANKLE));
+  //  double tempLeftLeg=leftLeg/2;
+
+    double rightLeg=getDistnce(pose.getPoseLandmark(PoseLandmark.Type.RIGHT_HIP),
+            pose.getPoseLandmark(PoseLandmark.Type.RIGHT_ANKLE));
+  //  double tempRightLeg=rightLeg/2;
+
+
+
+    //준비자세
+    if(rightElbowAngle<=90 && leftElbowAngle<=90){
+     // canvas.drawText("준비자세완료" , x, y, textPaint);
+      Log.d("PoseGraphic.class", "준비자세완료 " + "오른쪽 각도:"+rightElbowAngle +" 왼쪽 각도:"+leftElbowAngle);
+
+
+      //내려가는 자세
+      if((rightKneeAngle<=90 && leftKneeAngle<=90) || (rightHipAngle<=120 && leftHipAngle<=120)){
+        canvas.drawText("내려가는중" , x, y, textPaint);
+        cnt++;
+        canvas.drawText("개수: " + cnt, 3.0f, y, textPaint);
+        Log.d("PoseGraphic.class", "내려가는중"+"rightKneeAngle 각도: " + rightKneeAngle+ " leftKneeAngle 각도: " + leftKneeAngle);
+        Log.d("PoseGraphic.class","왼쪽 골반각도"+leftHipAngle);
+        Log.d("PoseGraphic.class", "갯수: " + cnt);
+
+
+        //올라가는 자세
+        if((rightKneeAngle>=160 && leftKneeAngle>=160)|| (rightHipAngle>=160 && leftHipAngle>=160)){
+          Log.d("PoseGraphic.class", "올라가는중"+"rightKneeAngle 각도: " + rightKneeAngle+ " leftKneeAngle 각도: " + leftKneeAngle);
+          if(cnt==12) {
+            canvas.drawText("1세트 달성! ", x, y, textPaint);
+            cnt = 0;
+          }
+        }
+      }
+
+      //내려가는 자세가 부정확 할 때
+    //  else  canvas.drawText("자세가 틀렸습니다." , x, y, textPaint);
+
+
+    }
+
+    else{
+      Toast.makeText(this.getApplicationContext(),"카메라 정면을 바라보고 양 손을 머리 뒤로 해주세요:"+rightElbowAngle,Toast.LENGTH_SHORT);
+      Log.d("PoseGraphic.class", "오른쪽 각도가 큼: " + rightElbowAngle);
+      Log.d("PoseGraphic.class", "왼쪽쪽 각도가 큼: " + leftElbowAngle);
+    }
 
   }
 
@@ -162,5 +260,12 @@ public class PoseGraphic extends Graphic {
       result = (360.0 - result); // 정확하게
     }
     return result;
+  }
+
+  static double getDistnce(PoseLandmark firstPoint, PoseLandmark lastPoint){
+    double result=Math.sqrt(Math.pow(lastPoint.getPosition().y-firstPoint.getPosition().y,2)+Math.pow(lastPoint.getPosition().x-firstPoint.getPosition().x,2));
+
+    return result;
+
   }
 }
