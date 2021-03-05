@@ -27,14 +27,14 @@ import androidx.core.content.ContextCompat;
 import com.google.common.util.concurrent.ListenableFuture;
 import java.util.concurrent.ExecutionException;
 
-/** View model for interacting with CameraX. */
+/**CameraX와 상호 작용하기위한 모델 보기 */
 public final class CameraXViewModel extends AndroidViewModel {
 
   private static final String TAG = "CameraXViewModel";
   private MutableLiveData<ProcessCameraProvider> cameraProviderLiveData;
 
   /**
-   * Create an instance which interacts with the camera service via the given application context.
+   * 주어진 애플리케이션 컨텍스트를 통해 카메라 서비스와 상호 작용하는 인스턴스 생성
    */
   public CameraXViewModel(@NonNull Application application) {
     super(application);

@@ -69,7 +69,7 @@ import com.google.mlkit.vision.label.custom.CustomImageLabelerOptions;
 import com.google.mlkit.vision.label.defaults.ImageLabelerOptions;
 import com.google.mlkit.vision.objects.custom.CustomObjectDetectorOptions;
 import com.google.mlkit.vision.objects.defaults.ObjectDetectorOptions;
-import com.google.mlkit.vision.pose.PoseDetectorOptions;
+import com.google.mlkit.vision.pose.PoseDetectorOptionsBase;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,13 +83,6 @@ public final class CameraXLivePreviewActivity extends AppCompatActivity
   private static final int PERMISSION_REQUESTS = 1;
 
   private static final String OBJECT_DETECTION = "AI 트레이너";
-  private static final String OBJECT_DETECTION_CUSTOM = "Custom Object Detection (Bird)";
-  private static final String FACE_DETECTION = "Face Detection";
-  private static final String TEXT_RECOGNITION = "Text Recognition";
-  private static final String BARCODE_SCANNING = "Barcode Scanning";
-  private static final String IMAGE_LABELING = "Image Labeling";
-  private static final String IMAGE_LABELING_CUSTOM = "Custom Image Labeling (Bird)";
-  private static final String AUTOML_LABELING = "AutoML Image Labeling";
   private static final String POSE_DETECTION = "AI 트레이너";
 
   private static final String STATE_SELECTED_MODEL = "selected_model";
@@ -145,14 +138,6 @@ public final class CameraXLivePreviewActivity extends AppCompatActivity
 
     //리스트 목록 저장
     List<String> options = new ArrayList<>();
-    //options.add(OBJECT_DETECTION);
-    //options.add(OBJECT_DETECTION_CUSTOM);
-   // options.add(FACE_DETECTION);
-    //options.add(TEXT_RECOGNITION);
-   // options.add(BARCODE_SCANNING);
-   // options.add(IMAGE_LABELING);
-   // options.add(IMAGE_LABELING_CUSTOM);
-   // options.add(AUTOML_LABELING);
     options.add(POSE_DETECTION);
 
 
@@ -204,8 +189,6 @@ public final class CameraXLivePreviewActivity extends AppCompatActivity
 
   @Override
   public synchronized void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-    // An item was selected. You can retrieve the selected item using
-    // parent.getItemAtPosition(pos)
     selectedModel = parent.getItemAtPosition(pos).toString();
     Log.d(TAG, "Selected model: " + selectedModel);
     bindAnalysisUseCase();
@@ -213,7 +196,7 @@ public final class CameraXLivePreviewActivity extends AppCompatActivity
 
   @Override
   public void onNothingSelected(AdapterView<?> parent) {
-    // Do nothing.
+
   }
 
   @Override
@@ -325,13 +308,17 @@ public final class CameraXLivePreviewActivity extends AppCompatActivity
     try {
       switch (selectedModel) {
         case POSE_DETECTION:
-          PoseDetectorOptions poseDetectorOptions =
-              PreferenceUtils.getPoseDetectorOptionsForLivePreview(this);
-
+          PoseDetectorOptionsBase poseDetectorOptions =
+                  PreferenceUtils.getPoseDetectorOptionsForLivePreview(this);
           boolean shouldShowInFrameLikelihood =
-              PreferenceUtils.shouldShowPoseDetectionInFrameLikelihoodLivePreview(this);
-
-          imageProcessor = new PoseDetectorProcessor(this, poseDetectorOptions, shouldShowInFrameLikelihood);
+                  PreferenceUtils.shouldShowPoseDetectionInFrameLikelihoodLivePreview(this);
+          boolean visualizeZ = PreferenceUtils.shouldPoseDetectionVisualizeZ(this);
+          boolean rescaleZ = PreferenceUtils.shouldPoseDetectionRescaleZForVisualization(this);
+          boolean runClassification = PreferenceUtils.shouldPoseDetectionRunClassification(this);
+          imageProcessor =
+                  new PoseDetectorProcessor(
+                          this, poseDetectorOptions, shouldShowInFrameLikelihood, visualizeZ, rescaleZ,
+                          runClassification, /* isStreamMode = */true);
           break;
 
         default:
@@ -348,7 +335,7 @@ public final class CameraXLivePreviewActivity extends AppCompatActivity
     }
 
     ImageAnalysis.Builder builder = new ImageAnalysis.Builder();
-    Size targetAnalysisSize = PreferenceUtils.getCameraXTargetAnalysisSize(this);
+    Size targetAnalysisSize = PreferenceUtils.getCameraXTargetResolution(this,lensFacing);
     if (targetAnalysisSize != null) {
       builder.setTargetResolution(targetAnalysisSize);
     }

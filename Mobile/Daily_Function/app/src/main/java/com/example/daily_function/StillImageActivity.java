@@ -54,7 +54,7 @@ import com.google.mlkit.vision.label.custom.CustomImageLabelerOptions;
 import com.google.mlkit.vision.label.defaults.ImageLabelerOptions;
 import com.google.mlkit.vision.objects.custom.CustomObjectDetectorOptions;
 import com.google.mlkit.vision.objects.defaults.ObjectDetectorOptions;
-import com.google.mlkit.vision.pose.PoseDetectorOptions;
+import com.google.mlkit.vision.pose.PoseDetectorOptionsBase;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,32 +62,34 @@ import java.util.List;
 /** Activity demonstrating different image detector features with a still image from camera. */
 @KeepName
 public final class StillImageActivity extends AppCompatActivity {
-
   private static final String TAG = "StillImageActivity";
 
   private static final String OBJECT_DETECTION = "Object Detection";
-  private static final String OBJECT_DETECTION_CUSTOM = "Custom Object Detection (Birds)";
+  private static final String OBJECT_DETECTION_CUSTOM = "Custom Object Detection (Bird)";
+  private static final String CUSTOM_AUTOML_OBJECT_DETECTION =
+          "Custom AutoML Object Detection (Flower)";
   private static final String FACE_DETECTION = "Face Detection";
   private static final String BARCODE_SCANNING = "Barcode Scanning";
   private static final String TEXT_RECOGNITION = "Text Recognition";
   private static final String IMAGE_LABELING = "Image Labeling";
-  private static final String IMAGE_LABELING_CUSTOM = "Custom Image Labeling (Birds)";
-  private static final String AUTOML_LABELING = "AutoML Labeling";
-  private static final String POSE_DETECTION = "AI 트레이너";
+  private static final String IMAGE_LABELING_CUSTOM = "Custom Image Labeling (Bird)";
+  private static final String CUSTOM_AUTOML_LABELING = "Custom AutoML Image Labeling (Flower)";
+  private static final String POSE_DETECTION = "Pose Detection";
+  private static final String SELFIE_SEGMENTATION = "Selfie Segmentation";
 
   private static final String SIZE_SCREEN = "w:screen"; // Match screen width
   private static final String SIZE_1024_768 = "w:1024"; // ~1024*768 in a normal ratio
   private static final String SIZE_640_480 = "w:640"; // ~640*480 in a normal ratio
 
-  private static final String KEY_IMAGE_URI = "com.example.daily_function.KEY_IMAGE_URI";
-  private static final String KEY_SELECTED_SIZE = "com.example.daily_function.KEY_SELECTED_SIZE";
+  private static final String KEY_IMAGE_URI = "com.google.mlkit.vision.demo.KEY_IMAGE_URI";
+  private static final String KEY_SELECTED_SIZE = "com.google.mlkit.vision.demo.KEY_SELECTED_SIZE";
 
   private static final int REQUEST_IMAGE_CAPTURE = 1001;
   private static final int REQUEST_CHOOSE_IMAGE = 1002;
 
   private ImageView preview;
   private GraphicOverlay graphicOverlay;
-  private String selectedMode = POSE_DETECTION;
+  private String selectedMode = OBJECT_DETECTION;
   private String selectedSize = SIZE_SCREEN;
 
   boolean isLandScape;
@@ -104,26 +106,26 @@ public final class StillImageActivity extends AppCompatActivity {
     setContentView(R.layout.activity_still_image);
 
     findViewById(R.id.select_image_button)
-        .setOnClickListener(
-            view -> {
-              // Menu for selecting either: a) take new photo b) select from existing
-              PopupMenu popup = new PopupMenu(StillImageActivity.this, view);
-              popup.setOnMenuItemClickListener(
-                  menuItem -> {
-                    int itemId = menuItem.getItemId();
-                    if (itemId == R.id.select_images_from_local) {
-                      startChooseImageIntentForResult();
-                      return true;
-                    } else if (itemId == R.id.take_photo_using_camera) {
-                      startCameraIntentForResult();
-                      return true;
-                    }
-                    return false;
-                  });
-              MenuInflater inflater = popup.getMenuInflater();
-              inflater.inflate(R.menu.camera_button_menu, popup.getMenu());
-              popup.show();
-            });
+            .setOnClickListener(
+                    view -> {
+                      // Menu for selecting either: a) take new photo b) select from existing
+                      PopupMenu popup = new PopupMenu(StillImageActivity.this, view);
+                      popup.setOnMenuItemClickListener(
+                              menuItem -> {
+                                int itemId = menuItem.getItemId();
+                                if (itemId == R.id.select_images_from_local) {
+                                  startChooseImageIntentForResult();
+                                  return true;
+                                } else if (itemId == R.id.take_photo_using_camera) {
+                                  startCameraIntentForResult();
+                                  return true;
+                                }
+                                return false;
+                              });
+                      MenuInflater inflater = popup.getMenuInflater();
+                      inflater.inflate(R.menu.camera_button_menu, popup.getMenu());
+                      popup.show();
+                    });
     preview = findViewById(R.id.preview);
     graphicOverlay = findViewById(R.id.graphic_overlay);
 
@@ -131,7 +133,7 @@ public final class StillImageActivity extends AppCompatActivity {
     populateSizeSelector();
 
     isLandScape =
-        (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
+            (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
 
     if (savedInstanceState != null) {
       imageUri = savedInstanceState.getParcelable(KEY_IMAGE_URI);
@@ -140,28 +142,28 @@ public final class StillImageActivity extends AppCompatActivity {
 
     View rootView = findViewById(R.id.root);
     rootView
-        .getViewTreeObserver()
-        .addOnGlobalLayoutListener(
-            new OnGlobalLayoutListener() {
-              @Override
-              public void onGlobalLayout() {
-                rootView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                imageMaxWidth = rootView.getWidth();
-                imageMaxHeight = rootView.getHeight() - findViewById(R.id.control).getHeight();
-                if (SIZE_SCREEN.equals(selectedSize)) {
-                  tryReloadAndDetectInImage();
-                }
-              }
-            });
+            .getViewTreeObserver()
+            .addOnGlobalLayoutListener(
+                    new OnGlobalLayoutListener() {
+                      @Override
+                      public void onGlobalLayout() {
+                        rootView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                        imageMaxWidth = rootView.getWidth();
+                        imageMaxHeight = rootView.getHeight() - findViewById(R.id.control).getHeight();
+                        if (SIZE_SCREEN.equals(selectedSize)) {
+                          tryReloadAndDetectInImage();
+                        }
+                      }
+                    });
 
     ImageView settingsButton = findViewById(R.id.settings_button);
     settingsButton.setOnClickListener(
-        v -> {
-          Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
-          intent.putExtra(
-              SettingsActivity.EXTRA_LAUNCH_SOURCE, SettingsActivity.LaunchSource.STILL_IMAGE);
-          startActivity(intent);
-        });
+            v -> {
+              Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+              intent.putExtra(
+                      SettingsActivity.EXTRA_LAUNCH_SOURCE, SettingsActivity.LaunchSource.STILL_IMAGE);
+              startActivity(intent);
+            });
   }
 
   @Override
@@ -172,36 +174,20 @@ public final class StillImageActivity extends AppCompatActivity {
     tryReloadAndDetectInImage();
   }
 
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-    getMenuInflater().inflate(R.menu.still_image_menu, menu);
-    return true;
-  }
-
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-    if (item.getItemId() == R.id.settings) {
-      Intent intent = new Intent(this, SettingsActivity.class);
-      intent.putExtra(SettingsActivity.EXTRA_LAUNCH_SOURCE, LaunchSource.STILL_IMAGE);
-      startActivity(intent);
-      return true;
-    }
-
-    return super.onOptionsItemSelected(item);
-  }
-
   private void populateFeatureSelector() {
     Spinner featureSpinner = findViewById(R.id.feature_selector);
     List<String> options = new ArrayList<>();
     options.add(OBJECT_DETECTION);
     options.add(OBJECT_DETECTION_CUSTOM);
+    options.add(CUSTOM_AUTOML_OBJECT_DETECTION);
     options.add(FACE_DETECTION);
     options.add(BARCODE_SCANNING);
     options.add(TEXT_RECOGNITION);
     options.add(IMAGE_LABELING);
     options.add(IMAGE_LABELING_CUSTOM);
-    options.add(AUTOML_LABELING);
+    options.add(CUSTOM_AUTOML_LABELING);
     options.add(POSE_DETECTION);
+    options.add(SELFIE_SEGMENTATION);
 
     // Creating adapter for featureSpinner
     ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, R.layout.spinner_style, options);
@@ -210,19 +196,19 @@ public final class StillImageActivity extends AppCompatActivity {
     // attaching data adapter to spinner
     featureSpinner.setAdapter(dataAdapter);
     featureSpinner.setOnItemSelectedListener(
-        new OnItemSelectedListener() {
+            new OnItemSelectedListener() {
 
-          @Override
-          public void onItemSelected(
-              AdapterView<?> parentView, View selectedItemView, int pos, long id) {
-            selectedMode = parentView.getItemAtPosition(pos).toString();
-            createImageProcessor();
-            tryReloadAndDetectInImage();
-          }
+              @Override
+              public void onItemSelected(
+                      AdapterView<?> parentView, View selectedItemView, int pos, long id) {
+                selectedMode = parentView.getItemAtPosition(pos).toString();
+                createImageProcessor();
+                tryReloadAndDetectInImage();
+              }
 
-          @Override
-          public void onNothingSelected(AdapterView<?> arg0) {}
-        });
+              @Override
+              public void onNothingSelected(AdapterView<?> arg0) {}
+            });
   }
 
   private void populateSizeSelector() {
@@ -232,26 +218,26 @@ public final class StillImageActivity extends AppCompatActivity {
     options.add(SIZE_1024_768);
     options.add(SIZE_640_480);
 
-    //스피너 어댑터
+    // Creating adapter for featureSpinner
     ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, R.layout.spinner_style, options);
-    // 드랍다운 형식
+    // Drop down layout style - list view with radio button
     dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-    // 스피너에 아이템 붙이기
+    // attaching data adapter to spinner
     sizeSpinner.setAdapter(dataAdapter);
     sizeSpinner.setOnItemSelectedListener(
-        new OnItemSelectedListener() {
+            new OnItemSelectedListener() {
 
-          @Override
-          public void onItemSelected(
-              AdapterView<?> parentView, View selectedItemView, int pos, long id) {
-            selectedSize = parentView.getItemAtPosition(pos).toString();
-            createImageProcessor();
-            tryReloadAndDetectInImage();
-          }
+              @Override
+              public void onItemSelected(
+                      AdapterView<?> parentView, View selectedItemView, int pos, long id) {
+                selectedSize = parentView.getItemAtPosition(pos).toString();
+                createImageProcessor();
+                tryReloadAndDetectInImage();
+              }
 
-          @Override
-          public void onNothingSelected(AdapterView<?> arg0) {}
-        });
+              @Override
+              public void onNothingSelected(AdapterView<?> arg0) {}
+            });
   }
 
   @Override
@@ -322,22 +308,22 @@ public final class StillImageActivity extends AppCompatActivity {
 
       // Determine how much to scale down the image
       float scaleFactor =
-          Math.max(
-              (float) imageBitmap.getWidth() / (float) targetedSize.first,
-              (float) imageBitmap.getHeight() / (float) targetedSize.second);
+              Math.max(
+                      (float) imageBitmap.getWidth() / (float) targetedSize.first,
+                      (float) imageBitmap.getHeight() / (float) targetedSize.second);
 
       Bitmap resizedBitmap =
-          Bitmap.createScaledBitmap(
-              imageBitmap,
-              (int) (imageBitmap.getWidth() / scaleFactor),
-              (int) (imageBitmap.getHeight() / scaleFactor),
-              true);
+              Bitmap.createScaledBitmap(
+                      imageBitmap,
+                      (int) (imageBitmap.getWidth() / scaleFactor),
+                      (int) (imageBitmap.getHeight() / scaleFactor),
+                      true);
 
       preview.setImageBitmap(resizedBitmap);
 
       if (imageProcessor != null) {
         graphicOverlay.setImageSourceInfo(
-            resizedBitmap.getWidth(), resizedBitmap.getHeight(), /* isFlipped= */ false);
+                resizedBitmap.getWidth(), resizedBitmap.getHeight(), /* isFlipped= */ false);
         imageProcessor.processBitmap(resizedBitmap, graphicOverlay);
       } else {
         Log.e(TAG, "Null imageProcessor, please check adb logs for imageProcessor creation error");
@@ -378,20 +364,28 @@ public final class StillImageActivity extends AppCompatActivity {
         case OBJECT_DETECTION:
           Log.i(TAG, "Using Object Detector Processor");
           ObjectDetectorOptions objectDetectorOptions =
-              PreferenceUtils.getObjectDetectorOptionsForStillImage(this);
+                  PreferenceUtils.getObjectDetectorOptionsForStillImage(this);
           imageProcessor = new ObjectDetectorProcessor(this, objectDetectorOptions);
           break;
         case OBJECT_DETECTION_CUSTOM:
           Log.i(TAG, "Using Custom Object Detector Processor");
           LocalModel localModel =
-              new LocalModel.Builder()
-                  .setAssetFilePath("custom_models/bird_classifier.tflite")
-                  .build();
+                  new LocalModel.Builder()
+                          .setAssetFilePath("custom_models/bird_classifier.tflite")
+                          .build();
           CustomObjectDetectorOptions customObjectDetectorOptions =
-              PreferenceUtils.getCustomObjectDetectorOptionsForStillImage(this, localModel);
+                  PreferenceUtils.getCustomObjectDetectorOptionsForStillImage(this, localModel);
           imageProcessor = new ObjectDetectorProcessor(this, customObjectDetectorOptions);
           break;
-
+        case CUSTOM_AUTOML_OBJECT_DETECTION:
+          Log.i(TAG, "Using Custom AutoML Object Detector Processor");
+          LocalModel customAutoMLODTLocalModel =
+                  new LocalModel.Builder().setAssetManifestFilePath("automl/manifest.json").build();
+          CustomObjectDetectorOptions customAutoMLODTOptions =
+                  PreferenceUtils.getCustomObjectDetectorOptionsForStillImage(
+                          this, customAutoMLODTLocalModel);
+          imageProcessor = new ObjectDetectorProcessor(this, customAutoMLODTOptions);
+          break;
           /*
         case FACE_DETECTION:
           imageProcessor = new FaceDetectorProcessor(this);
@@ -406,30 +400,47 @@ public final class StillImageActivity extends AppCompatActivity {
           imageProcessor = new LabelDetectorProcessor(this, ImageLabelerOptions.DEFAULT_OPTIONS);
           break;
 
+
         case IMAGE_LABELING_CUSTOM:
           Log.i(TAG, "Using Custom Image Label Detector Processor");
           LocalModel localClassifier =
-              new LocalModel.Builder()
-                  .setAssetFilePath("custom_models/bird_classifier.tflite")
-                  .build();
+                  new LocalModel.Builder()
+                          .setAssetFilePath("custom_models/bird_classifier.tflite")
+                          .build();
           CustomImageLabelerOptions customImageLabelerOptions =
-              new CustomImageLabelerOptions.Builder(localClassifier).build();
+                  new CustomImageLabelerOptions.Builder(localClassifier).build();
           imageProcessor = new LabelDetectorProcessor(this, customImageLabelerOptions);
+          break;
+        case CUSTOM_AUTOML_LABELING:
+          Log.i(TAG, "Using Custom AutoML Image Label Detector Processor");
+          LocalModel customAutoMLLabelLocalModel =
+                  new LocalModel.Builder().setAssetManifestFilePath("automl/manifest.json").build();
+          CustomImageLabelerOptions customAutoMLLabelOptions =
+                  new CustomImageLabelerOptions.Builder(customAutoMLLabelLocalModel)
+                          .setConfidenceThreshold(0)
+                          .build();
+          imageProcessor = new LabelDetectorProcessor(this, customAutoMLLabelOptions);
           break;
 
            */
-        case AUTOML_LABELING:
-          imageProcessor = new AutoMLImageLabelerProcessor(this);
-          break;
         case POSE_DETECTION:
-          PoseDetectorOptions poseDetectorOptions =
-              PreferenceUtils.getPoseDetectorOptionsForStillImage(this);
-          boolean shouldShowInFrameLikelihood =
-              PreferenceUtils.shouldShowPoseDetectionInFrameLikelihoodStillImage(this);
+          PoseDetectorOptionsBase poseDetectorOptions =
+                  PreferenceUtils.getPoseDetectorOptionsForStillImage(this);
           Log.i(TAG, "Using Pose Detector with options " + poseDetectorOptions);
+          boolean shouldShowInFrameLikelihood =
+                  PreferenceUtils.shouldShowPoseDetectionInFrameLikelihoodStillImage(this);
+          boolean visualizeZ = PreferenceUtils.shouldPoseDetectionVisualizeZ(this);
+          boolean rescaleZ = PreferenceUtils.shouldPoseDetectionRescaleZForVisualization(this);
+          boolean runClassification = PreferenceUtils.shouldPoseDetectionRunClassification(this);
           imageProcessor =
-              new PoseDetectorProcessor(this, poseDetectorOptions, shouldShowInFrameLikelihood);
+                  new PoseDetectorProcessor(
+                          this, poseDetectorOptions, shouldShowInFrameLikelihood, visualizeZ, rescaleZ,
+                          runClassification, /* isStreamMode = */false);
           break;
+
+      //  case SELFIE_SEGMENTATION:
+         // imageProcessor = new SegmenterProcessor(this, /* isStreamMode= */ false);
+        //  break;
         default:
           Log.e(TAG, "Unknown selectedMode: " + selectedMode);
       }
@@ -439,7 +450,7 @@ public final class StillImageActivity extends AppCompatActivity {
               getApplicationContext(),
               "Can not create image processor: " + e.getMessage(),
               Toast.LENGTH_LONG)
-          .show();
+              .show();
     }
   }
 }

@@ -21,7 +21,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import androidx.annotation.Nullable;
 
-/** Graphic instance for rendering inference info (latency, FPS, resolution) in an overlay view. */
+/** 오버레이보기에서 추론 정보 (대기 시간, FPS, 해상도)를 렌더링하기위한 그래픽 인스턴스 */
 public class InferenceInfoGraphic extends GraphicOverlay.Graphic {
 
   private static final int TEXT_COLOR = Color.WHITE;
@@ -30,15 +30,17 @@ public class InferenceInfoGraphic extends GraphicOverlay.Graphic {
   private final Paint textPaint;
   private final GraphicOverlay overlay;
   private final double latency;
+  private final long detectorLatency ;
 
-  // Only valid when a stream of input images is being processed. Null for single image mode.
+  // 입력 이미지 스트림이 처리 중일 때만 유효합니다. 단일 이미지 모드의 경우 Null
   @Nullable private final Integer framesPerSecond;
 
   public InferenceInfoGraphic(
-      GraphicOverlay overlay, double latency, @Nullable Integer framesPerSecond) {
+      GraphicOverlay overlay, double latency,  long detectorLatency, @Nullable Integer framesPerSecond) {
     super(overlay);
     this.overlay = overlay;
     this.latency = latency;
+    this.detectorLatency = detectorLatency;
     this.framesPerSecond = framesPerSecond;
     textPaint = new Paint();
     textPaint.setColor(TEXT_COLOR);

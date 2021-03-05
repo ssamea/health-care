@@ -54,7 +54,7 @@ import com.google.mlkit.vision.label.custom.CustomImageLabelerOptions;
 import com.google.mlkit.vision.label.defaults.ImageLabelerOptions;
 import com.google.mlkit.vision.objects.custom.CustomObjectDetectorOptions;
 import com.google.mlkit.vision.objects.defaults.ObjectDetectorOptions;
-import com.google.mlkit.vision.pose.PoseDetectorOptions;
+import com.google.mlkit.vision.pose.PoseDetectorOptionsBase;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,14 +66,17 @@ public final class LivePreviewActivity extends AppCompatActivity
         OnItemSelectedListener,
         CompoundButton.OnCheckedChangeListener {
   private static final String OBJECT_DETECTION = "Object Detection";
-  private static final String OBJECT_DETECTION_CUSTOM = "Custom Object Detection (Birds)";
+  private static final String OBJECT_DETECTION_CUSTOM = "Custom Object Detection (Bird)";
+  private static final String CUSTOM_AUTOML_OBJECT_DETECTION =
+          "Custom AutoML Object Detection (Flower)";
   private static final String FACE_DETECTION = "Face Detection";
   private static final String TEXT_RECOGNITION = "Text Recognition";
   private static final String BARCODE_SCANNING = "Barcode Scanning";
   private static final String IMAGE_LABELING = "Image Labeling";
-  private static final String IMAGE_LABELING_CUSTOM = "Custom Image Labeling (Birds)";
-  private static final String AUTOML_LABELING = "AutoML Image Labeling";
+  private static final String IMAGE_LABELING_CUSTOM = "Custom Image Labeling (Bird)";
+  private static final String CUSTOM_AUTOML_LABELING = "Custom AutoML Image Labeling (Flower)";
   private static final String POSE_DETECTION = "Pose Detection";
+  private static final String SELFIE_SEGMENTATION = "Selfie Segmentation";
 
   private static final String TAG = "LivePreviewActivity";
   private static final int PERMISSION_REQUESTS = 1;
@@ -103,13 +106,16 @@ public final class LivePreviewActivity extends AppCompatActivity
     List<String> options = new ArrayList<>();
     options.add(OBJECT_DETECTION);
     options.add(OBJECT_DETECTION_CUSTOM);
+    options.add(CUSTOM_AUTOML_OBJECT_DETECTION);
     options.add(FACE_DETECTION);
     options.add(TEXT_RECOGNITION);
     options.add(BARCODE_SCANNING);
     options.add(IMAGE_LABELING);
     options.add(IMAGE_LABELING_CUSTOM);
-    options.add(AUTOML_LABELING);
+    options.add(CUSTOM_AUTOML_LABELING);
     options.add(POSE_DETECTION);
+    options.add(SELFIE_SEGMENTATION);
+
     // Creating adapter for spinner
     ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, R.layout.spinner_style, options);
     // Drop down layout style - list view with radio button
@@ -123,36 +129,18 @@ public final class LivePreviewActivity extends AppCompatActivity
 
     ImageView settingsButton = findViewById(R.id.settings_button);
     settingsButton.setOnClickListener(
-        v -> {
-          Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
-          intent.putExtra(
-              SettingsActivity.EXTRA_LAUNCH_SOURCE, SettingsActivity.LaunchSource.LIVE_PREVIEW);
-          startActivity(intent);
-        });
+            v -> {
+              Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+              intent.putExtra(
+                      SettingsActivity.EXTRA_LAUNCH_SOURCE, SettingsActivity.LaunchSource.LIVE_PREVIEW);
+              startActivity(intent);
+            });
 
     if (allPermissionsGranted()) {
       createCameraSource(selectedModel);
     } else {
       getRuntimePermissions();
     }
-  }
-
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-    getMenuInflater().inflate(R.menu.live_preview_menu, menu);
-    return true;
-  }
-
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-    if (item.getItemId() == R.id.settings) {
-      Intent intent = new Intent(this, SettingsActivity.class);
-      intent.putExtra(SettingsActivity.EXTRA_LAUNCH_SOURCE, LaunchSource.LIVE_PREVIEW);
-      startActivity(intent);
-      return true;
-    }
-
-    return super.onOptionsItemSelected(item);
   }
 
   @Override
@@ -200,22 +188,31 @@ public final class LivePreviewActivity extends AppCompatActivity
         case OBJECT_DETECTION:
           Log.i(TAG, "Using Object Detector Processor");
           ObjectDetectorOptions objectDetectorOptions =
-              PreferenceUtils.getObjectDetectorOptionsForLivePreview(this);
+                  PreferenceUtils.getObjectDetectorOptionsForLivePreview(this);
           cameraSource.setMachineLearningFrameProcessor(
-              new ObjectDetectorProcessor(this, objectDetectorOptions));
+                  new ObjectDetectorProcessor(this, objectDetectorOptions));
           break;
         case OBJECT_DETECTION_CUSTOM:
           Log.i(TAG, "Using Custom Object Detector Processor");
           LocalModel localModel =
-              new LocalModel.Builder()
-                  .setAssetFilePath("custom_models/bird_classifier.tflite")
-                  .build();
+                  new LocalModel.Builder()
+                          .setAssetFilePath("custom_models/bird_classifier.tflite")
+                          .build();
           CustomObjectDetectorOptions customObjectDetectorOptions =
-              PreferenceUtils.getCustomObjectDetectorOptionsForLivePreview(this, localModel);
+                  PreferenceUtils.getCustomObjectDetectorOptionsForLivePreview(this, localModel);
           cameraSource.setMachineLearningFrameProcessor(
-              new ObjectDetectorProcessor(this, customObjectDetectorOptions));
+                  new ObjectDetectorProcessor(this, customObjectDetectorOptions));
           break;
-
+        case CUSTOM_AUTOML_OBJECT_DETECTION:
+          Log.i(TAG, "Using Custom AutoML Object Detector Processor");
+          LocalModel customAutoMLODTLocalModel =
+                  new LocalModel.Builder().setAssetManifestFilePath("automl/manifest.json").build();
+          CustomObjectDetectorOptions customAutoMLODTOptions =
+                  PreferenceUtils.getCustomObjectDetectorOptionsForLivePreview(
+                          this, customAutoMLODTLocalModel);
+          cameraSource.setMachineLearningFrameProcessor(
+                  new ObjectDetectorProcessor(this, customAutoMLODTOptions));
+          break;
           /*
         case TEXT_RECOGNITION:
           Log.i(TAG, "Using on-device Text recognition Processor");
@@ -224,9 +221,9 @@ public final class LivePreviewActivity extends AppCompatActivity
         case FACE_DETECTION:
           Log.i(TAG, "Using Face Detector Processor");
           FaceDetectorOptions faceDetectorOptions =
-              PreferenceUtils.getFaceDetectorOptionsForLivePreview(this);
+                  PreferenceUtils.getFaceDetectorOptionsForLivePreview(this);
           cameraSource.setMachineLearningFrameProcessor(
-              new FaceDetectorProcessor(this, faceDetectorOptions));
+                  new FaceDetectorProcessor(this, faceDetectorOptions));
           break;
         case BARCODE_SCANNING:
           Log.i(TAG, "Using Barcode Detector Processor");
@@ -235,46 +232,61 @@ public final class LivePreviewActivity extends AppCompatActivity
         case IMAGE_LABELING:
           Log.i(TAG, "Using Image Label Detector Processor");
           cameraSource.setMachineLearningFrameProcessor(
-              new LabelDetectorProcessor(this, ImageLabelerOptions.DEFAULT_OPTIONS));
+                  new LabelDetectorProcessor(this, ImageLabelerOptions.DEFAULT_OPTIONS));
           break;
         case IMAGE_LABELING_CUSTOM:
           Log.i(TAG, "Using Custom Image Label Detector Processor");
           LocalModel localClassifier =
-              new LocalModel.Builder()
-                  .setAssetFilePath("custom_models/bird_classifier.tflite")
-                  .build();
+                  new LocalModel.Builder()
+                          .setAssetFilePath("custom_models/bird_classifier.tflite")
+                          .build();
           CustomImageLabelerOptions customImageLabelerOptions =
-              new CustomImageLabelerOptions.Builder(localClassifier).build();
+                  new CustomImageLabelerOptions.Builder(localClassifier).build();
           cameraSource.setMachineLearningFrameProcessor(
-              new LabelDetectorProcessor(this, customImageLabelerOptions));
+                  new LabelDetectorProcessor(this, customImageLabelerOptions));
           break;
-
+        case CUSTOM_AUTOML_LABELING:
+          Log.i(TAG, "Using Custom AutoML Image Label Detector Processor");
+          LocalModel customAutoMLLabelLocalModel =
+                  new LocalModel.Builder().setAssetManifestFilePath("automl/manifest.json").build();
+          CustomImageLabelerOptions customAutoMLLabelOptions =
+                  new CustomImageLabelerOptions.Builder(customAutoMLLabelLocalModel)
+                          .setConfidenceThreshold(0)
+                          .build();
+          cameraSource.setMachineLearningFrameProcessor(
+                  new LabelDetectorProcessor(this, customAutoMLLabelOptions));
+          break;
 
            */
-
-        case AUTOML_LABELING:
-          cameraSource.setMachineLearningFrameProcessor(
-              new AutoMLImageLabelerProcessor(this));
-          break;
         case POSE_DETECTION:
-          PoseDetectorOptions poseDetectorOptions =
-              PreferenceUtils.getPoseDetectorOptionsForLivePreview(this);
-          boolean shouldShowInFrameLikelihood =
-              PreferenceUtils.shouldShowPoseDetectionInFrameLikelihoodLivePreview(this);
+          PoseDetectorOptionsBase poseDetectorOptions =
+                  PreferenceUtils.getPoseDetectorOptionsForLivePreview(this);
           Log.i(TAG, "Using Pose Detector with options " + poseDetectorOptions);
-          cameraSource.setMachineLearningFrameProcessor(
-              new PoseDetectorProcessor(this, poseDetectorOptions, shouldShowInFrameLikelihood));
+          boolean shouldShowInFrameLikelihood =
+                  PreferenceUtils.shouldShowPoseDetectionInFrameLikelihoodLivePreview(this);
+          boolean visualizeZ = PreferenceUtils.shouldPoseDetectionVisualizeZ(this);
+          boolean rescaleZ = PreferenceUtils.shouldPoseDetectionRescaleZForVisualization(this);
+          boolean runClassification = PreferenceUtils.shouldPoseDetectionRunClassification(this);
+          cameraSource.setMachineLearningFrameProcessor(new PoseDetectorProcessor(
+                  this, poseDetectorOptions, shouldShowInFrameLikelihood, visualizeZ, rescaleZ,
+                  runClassification, /* isStreamMode = */true));
           break;
+          /*
+        case SELFIE_SEGMENTATION:
+          cameraSource.setMachineLearningFrameProcessor(new SegmenterProcessor(this));
+          break;
+
+           */
         default:
           Log.e(TAG, "Unknown model: " + model);
       }
-    } catch (Exception e) {
+    } catch (RuntimeException e) {
       Log.e(TAG, "Can not create image processor: " + model, e);
       Toast.makeText(
               getApplicationContext(),
               "Can not create image processor: " + e.getMessage(),
               Toast.LENGTH_LONG)
-          .show();
+              .show();
     }
   }
 
@@ -327,8 +339,8 @@ public final class LivePreviewActivity extends AppCompatActivity
   private String[] getRequiredPermissions() {
     try {
       PackageInfo info =
-          this.getPackageManager()
-              .getPackageInfo(this.getPackageName(), PackageManager.GET_PERMISSIONS);
+              this.getPackageManager()
+                      .getPackageInfo(this.getPackageName(), PackageManager.GET_PERMISSIONS);
       String[] ps = info.requestedPermissions;
       if (ps != null && ps.length > 0) {
         return ps;
@@ -359,13 +371,13 @@ public final class LivePreviewActivity extends AppCompatActivity
 
     if (!allNeededPermissions.isEmpty()) {
       ActivityCompat.requestPermissions(
-          this, allNeededPermissions.toArray(new String[0]), PERMISSION_REQUESTS);
+              this, allNeededPermissions.toArray(new String[0]), PERMISSION_REQUESTS);
     }
   }
 
   @Override
   public void onRequestPermissionsResult(
-      int requestCode, String[] permissions, int[] grantResults) {
+          int requestCode, String[] permissions, int[] grantResults) {
     Log.i(TAG, "Permission granted!");
     if (allPermissionsGranted()) {
       createCameraSource(selectedModel);
@@ -375,7 +387,7 @@ public final class LivePreviewActivity extends AppCompatActivity
 
   private static boolean isPermissionGranted(Context context, String permission) {
     if (ContextCompat.checkSelfPermission(context, permission)
-        == PackageManager.PERMISSION_GRANTED) {
+            == PackageManager.PERMISSION_GRANTED) {
       Log.i(TAG, "Permission granted: " + permission);
       return true;
     }

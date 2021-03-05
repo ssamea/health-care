@@ -16,7 +16,7 @@
 
 package com.example.daily_function;
 
-/** Describing a frame info. */
+/** 프레임 정보 설명 */
 public class FrameMetadata {
 
   private final int width;

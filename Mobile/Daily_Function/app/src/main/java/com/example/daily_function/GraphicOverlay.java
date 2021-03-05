@@ -47,19 +47,18 @@ import java.util.List;
 public class GraphicOverlay extends View {
   private final Object lock = new Object();
   private final List<Graphic> graphics = new ArrayList<>();
-  // Matrix for transforming from image coordinates to overlay view coordinates.
+  // 이미지 좌표에서 오버레이 뷰 좌표로 변환하기위한 매트릭스.
   private final Matrix transformationMatrix = new Matrix();
 
   private int imageWidth;
   private int imageHeight;
-  // The factor of overlay View size to image size. Anything in the image coordinates need to be
-  // scaled by this amount to fit with the area of overlay View.
+  // 이미지 크기에 대한 오버레이보기 크기의 요소
+  // 이미지 좌표의 모든 항목은 오버레이보기 영역에 맞게 크기만큼 조정되어야함
   private float scaleFactor = 1.0f;
-  // The number of horizontal pixels needed to be cropped on each side to fit the image with the
-  // area of overlay View after scaling.
+  // 크기 조정 후 오버레이보기 영역에 이미지를 맞추기 위해 각면에서 잘라야하는 수평 픽셀 수
   private float postScaleWidthOffset;
-  // The number of vertical pixels needed to be cropped on each side to fit the image with the
-  // area of overlay View after scaling.
+  //이미지에 맞게 각 측면에서 잘라야하는 수직 픽셀 수
+  // 스케일링 후 오버레이 뷰 영역.
   private float postScaleHeightOffset;
   private boolean isImageFlipped;
   private boolean needUpdateTransformation = true;
@@ -90,12 +89,12 @@ public class GraphicOverlay extends View {
      */
     public abstract void draw(Canvas canvas);
 
-    /** Adjusts the supplied value from the image scale to the view scale. */
+    /** 제공된 값을 이미지 스케일에서 뷰 스케일로 조정 */
     public float scale(float imagePixel) {
       return imagePixel * overlay.scaleFactor;
     }
 
-    /** Returns the application context of the app. */
+    /** 앱의 애플리케이션 컨텍스트를 반환 */
     public Context getApplicationContext() {
       return overlay.getContext().getApplicationContext();
     }
@@ -105,7 +104,7 @@ public class GraphicOverlay extends View {
     }
 
     /**
-     * Adjusts the x coordinate from the image's coordinate system to the view coordinate system.
+     * 이미지의 좌표계에서 뷰 좌표계로 x 좌표를 조정
      */
     public float translateX(float x) {
       if (overlay.isImageFlipped) {
@@ -116,7 +115,7 @@ public class GraphicOverlay extends View {
     }
 
     /**
-     * Adjusts the y coordinate from the image's coordinate system to the view coordinate system.
+     * 이미지의 좌표계에서 뷰 좌표계로 y 좌표를 조정
      */
     public float translateY(float y) {
       return scale(y) - overlay.postScaleHeightOffset;
@@ -141,7 +140,7 @@ public class GraphicOverlay extends View {
             needUpdateTransformation = true);
   }
 
-  /** Removes all graphics from the overlay. */
+  /** 오버레이에서 모든 그래픽을 제거 */
   public void clear() {
     synchronized (lock) {
       graphics.clear();
@@ -149,14 +148,14 @@ public class GraphicOverlay extends View {
     postInvalidate();
   }
 
-  /** Adds a graphic to the overlay. */
+  /** 오버레이에 그래픽을 추가 */
   public void add(Graphic graphic) {
     synchronized (lock) {
       graphics.add(graphic);
     }
   }
 
-  /** Removes a graphic from the overlay. */
+  /**오버레이에서 그래픽을 제거 */
   public void remove(Graphic graphic) {
     synchronized (lock) {
       graphics.remove(graphic);
@@ -165,8 +164,7 @@ public class GraphicOverlay extends View {
   }
 
   /**
-   * Sets the source information of the image being processed by detectors, including size and
-   * whether it is flipped, which informs how to transform image coordinates later.
+   * 나중에 이미지 좌표를 변환하는 방법을 알려주는 크기 및 뒤집기 여부를 포함하여 감지기에서 처리중인 이미지의 소스 정보를 설정
    *
    * @param imageWidth the width of the image sent to ML Kit detectors
    * @param imageHeight the height of the image sent to ML Kit detectors
@@ -222,7 +220,7 @@ public class GraphicOverlay extends View {
     needUpdateTransformation = false;
   }
 
-  /** Draws the overlay with its associated graphic objects. */
+  /** 연관된 그래픽 객체로 오버레이를 그림 */
   @Override
   protected void onDraw(Canvas canvas) {
     super.onDraw(canvas);

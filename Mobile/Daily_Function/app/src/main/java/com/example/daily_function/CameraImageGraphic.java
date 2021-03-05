@@ -20,7 +20,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import com.example.daily_function.GraphicOverlay.Graphic;
 
-/** Draw camera image to background. */
+/**카메라 이미지를 배경으로 그림 */
 public class CameraImageGraphic extends Graphic {
 
   private final Bitmap bitmap;

@@ -57,6 +57,10 @@ android {
         noCompress "tflite"
     }
 
+    repositories {
+        // Depending on AndroidX Snapshot Builds to get the latest CameraX libs.
+        maven { url 'https://androidx.dev/snapshots/builds/6787662/artifacts/repository/' }
+    }
 
 }
 
@@ -137,12 +141,16 @@ dependencies {
     implementation 'com.google.mlkit:image-labeling-custom:16.2.1'
 
     // Pose detection
-    implementation 'com.google.mlkit:pose-detection:16.0.0'
+   // implementation 'com.google.mlkit:pose-detection:16.0.0'
+    // Pose detection with default models
+    implementation 'com.google.mlkit:pose-detection:17.0.1-beta3'
+    // Pose detection with accurate models
+    implementation 'com.google.mlkit:pose-detection-accurate:17.0.1-beta3'
 
     // -------------------------------------------------------
 
     implementation 'com.google.code.gson:gson:2.8.5'
-    implementation 'com.google.guava:guava:17.0'
+    implementation 'com.google.guava:guava:27.1-android'
 
     // For how to setup gradle dependencies in Android X, see:
     // https://developer.android.com/training/testing/set-up-project#gradle-dependencies

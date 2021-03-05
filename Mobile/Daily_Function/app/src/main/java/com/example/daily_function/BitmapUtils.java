@@ -40,11 +40,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 
-/** Utils functions for bitmap conversions. */
+/** 비트 맵 변환을위한 유틸리티 함수 */
 public class BitmapUtils {
   private static final String TAG = "BitmapUtils";
 
-  /** Converts NV21 format byte buffer to bitmap. */
+  /**NV21 형식 바이트 버퍼를 비트 맵으로 변환 */
   @Nullable
   public static Bitmap getBitmap(ByteBuffer data, FrameMetadata metadata) {
     data.rewind();
@@ -67,7 +67,7 @@ public class BitmapUtils {
     return null;
   }
 
-  /** Converts a YUV_420_888 image from CameraX API to a bitmap. */
+  /** CameraX API에서 YUV_420_888 이미지를 비트 맵으로 변환 */
   @RequiresApi(VERSION_CODES.KITKAT)
   @Nullable
   @ExperimentalGetImage
@@ -84,7 +84,7 @@ public class BitmapUtils {
     return getBitmap(nv21Buffer, frameMetadata);
   }
 
-  /** Rotates a bitmap if it is converted from a bytebuffer. */
+  /** 바이트 버퍼에서 변환 된 경우 비트 맵을 회전 */
   private static Bitmap rotateBitmap(
       Bitmap bitmap, int rotationDegrees, boolean flipX, boolean flipY) {
     Matrix matrix = new Matrix();

@@ -16,6 +16,8 @@
 
 package com.example.daily_function;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 import android.app.ActivityManager;
 import android.app.ActivityManager.MemoryInfo;
 import android.content.Context;
@@ -61,20 +63,23 @@ public abstract class VisionProcessorBase<T> implements VisionImageProcessor {
   private final Timer fpsTimer = new Timer();
   private final ScopedExecutor executor;
 
-  // Whether this processor is already shut down
+  //이 프로세서가 이미 종료되었는지 여부
   private boolean isShutdown;
 
-  // Used to calculate latency, running in the same thread, no sync needed.
+  // 대기 시간을 계산하는 데 사용되며 동일한 스레드에서 실행
   private int numRuns = 0;
-  private long totalRunMs = 0;
-  private long maxRunMs = 0;
-  private long minRunMs = Long.MAX_VALUE;
+  private long totalFrameMs = 0;
+  private long maxFrameMs = 0;
+  private long minFrameMs = Long.MAX_VALUE;
+  private long totalDetectorMs = 0;
+  private long maxDetectorMs = 0;
+  private long minDetectorMs = Long.MAX_VALUE;
 
-  // Frame count that have been processed so far in an one second interval to calculate FPS.
+  //FPS를 계산하기 위해 지금까지 1 초 간격으로 처리 된 프레임 수
   private int frameProcessedInOneSecondInterval = 0;
   private int framesPerSecond = 0;
 
-  // To keep the latest images and its metadata.
+  // 최신 이미지와 해당 메타 데이터를 유지
   @GuardedBy("this")
   private ByteBuffer latestImage;
 
@@ -91,31 +96,33 @@ public abstract class VisionProcessorBase<T> implements VisionImageProcessor {
     activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
     executor = new ScopedExecutor(TaskExecutors.MAIN_THREAD);
     fpsTimer.scheduleAtFixedRate(
-        new TimerTask() {
-          @Override
-          public void run() {
-            framesPerSecond = frameProcessedInOneSecondInterval;
-            frameProcessedInOneSecondInterval = 0;
-          }
-        },
-        /* delay= */ 0,
-        /* period= */ 1000);
+            new TimerTask() {
+              @Override
+              public void run() {
+                framesPerSecond = frameProcessedInOneSecondInterval;
+                frameProcessedInOneSecondInterval = 0;
+              }
+            },
+            /* delay= */ 0,
+            /* period= */ 1000);
   }
 
   // -----------------단일 정지 이미지 처리 용 코드----------------------------------------
   @Override
   public void processBitmap(Bitmap bitmap, final GraphicOverlay graphicOverlay) {
+    long frameStartMs = SystemClock.elapsedRealtime();
     requestDetectInImage(
-        InputImage.fromBitmap(bitmap, 0),
-        graphicOverlay,
-        /* originalCameraImage= */ null,
-        /* shouldShowFps= */ false);
+            InputImage.fromBitmap(bitmap, 0),
+            graphicOverlay,
+            /* originalCameraImage= */ null,
+            /* shouldShowFps= */ false,
+            frameStartMs);
   }
 
   // -----------------Camera1 API에서 실시간 미리보기 프레임 처리를위한 코드-----------------------
   @Override
   public synchronized void processByteBuffer(
-      ByteBuffer data, final FrameMetadata frameMetadata, final GraphicOverlay graphicOverlay) {
+          ByteBuffer data, final FrameMetadata frameMetadata, final GraphicOverlay graphicOverlay) {
     latestImage = data;
     latestImageMetaData = frameMetadata;
     if (processingImage == null && processingMetaData == null) {
@@ -134,31 +141,35 @@ public abstract class VisionProcessorBase<T> implements VisionImageProcessor {
   }
 
   private void processImage(
-      ByteBuffer data, final FrameMetadata frameMetadata, final GraphicOverlay graphicOverlay) {
-   // 라이브 뷰포트가 켜져있는 경우 (즉, 표면 아래 뷰가 카메라 미리보기 드로잉을 처리 함) 수동 미리보기 드로잉에 사용 된 불필요한 비트 맵 생성을 건너 뜀
+          ByteBuffer data, final FrameMetadata frameMetadata, final GraphicOverlay graphicOverlay) {
+    long frameStartMs = SystemClock.elapsedRealtime();
+
+    // 라이브 뷰포트 아래 뷰가 카메라 미리보기 드로잉을 처리-> 수동 미리보기 드로잉에 사용 된 불필요한 비트 맵 생성 생략
     Bitmap bitmap =
-        PreferenceUtils.isCameraLiveViewportEnabled(graphicOverlay.getContext())
-            ? null
-            : BitmapUtils.getBitmap(data, frameMetadata);
+            PreferenceUtils.isCameraLiveViewportEnabled(graphicOverlay.getContext())
+                    ? null
+                    : BitmapUtils.getBitmap(data, frameMetadata);
 
     requestDetectInImage(
             InputImage.fromByteBuffer(
-                data,
-                frameMetadata.getWidth(),
-                frameMetadata.getHeight(),
-                frameMetadata.getRotation(),
-                InputImage.IMAGE_FORMAT_NV21),
+                    data,
+                    frameMetadata.getWidth(),
+                    frameMetadata.getHeight(),
+                    frameMetadata.getRotation(),
+                    InputImage.IMAGE_FORMAT_NV21),
             graphicOverlay,
             bitmap,
-            /* shouldShowFps= */ true)
-        .addOnSuccessListener(executor, results -> processLatestImage(graphicOverlay));
+            /* shouldShowFps= */ true,
+            frameStartMs)
+            .addOnSuccessListener(executor, results -> processLatestImage(graphicOverlay));
   }
 
-  // ----------------- CameraX API처리를 위한 코드-----------------------
+  // ----------------- CameraX API를 위한 코드-----------------------
   @Override
   @RequiresApi(VERSION_CODES.KITKAT)
   @ExperimentalGetImage
   public void processImageProxy(ImageProxy image, GraphicOverlay graphicOverlay) {
+    long frameStartMs = SystemClock.elapsedRealtime();
     if (isShutdown) {
       image.close();
       return;
@@ -173,68 +184,92 @@ public abstract class VisionProcessorBase<T> implements VisionImageProcessor {
             InputImage.fromMediaImage(image.getImage(), image.getImageInfo().getRotationDegrees()),
             graphicOverlay,
             /* originalCameraImage= */ bitmap,
-            /* shouldShowFps= */ true)
-        // When the image is from CameraX analysis use case, must call image.close() on received
-        // images when finished using them. Otherwise, new images may not be received or the camera
-        // may stall.
-        .addOnCompleteListener(results -> image.close());
+            /* shouldShowFps= */ true,
+            frameStartMs)
+            // When the image is from CameraX analysis use case, must call image.close() on received
+            // images when finished using them. Otherwise, new images may not be received or the camera
+            // may stall.
+            .addOnCompleteListener(results -> image.close());
   }
 
-  // -----------------Common processing logic-------------------------------------------------------
+  // -----------------프로세스 처리 로직-------------------------------------------------------
   private Task<T> requestDetectInImage(
-      final InputImage image,
-      final GraphicOverlay graphicOverlay,
-      @Nullable final Bitmap originalCameraImage,
-      boolean shouldShowFps) {
-    final long startMs = SystemClock.elapsedRealtime();
+          final InputImage image,
+          final GraphicOverlay graphicOverlay,
+          @Nullable final Bitmap originalCameraImage,
+          boolean shouldShowFps,
+          long frameStartMs) {
+    final long detectorStartMs = SystemClock.elapsedRealtime();
     return detectInImage(image)
-        .addOnSuccessListener(
-            executor,
-            results -> {
-              long currentLatencyMs = SystemClock.elapsedRealtime() - startMs;
-              numRuns++;
-              frameProcessedInOneSecondInterval++;
-              totalRunMs += currentLatencyMs;
-              maxRunMs = Math.max(currentLatencyMs, maxRunMs);
-              minRunMs = Math.min(currentLatencyMs, minRunMs);
+            .addOnSuccessListener(
+                    executor,
+                    results -> {
+                      long endMs = SystemClock.elapsedRealtime();
+                      long currentFrameLatencyMs = endMs - frameStartMs;
+                      long currentDetectorLatencyMs = endMs - detectorStartMs;
+                      numRuns++;
+                      frameProcessedInOneSecondInterval++;
+                      totalFrameMs += currentFrameLatencyMs;
+                      maxFrameMs = max(currentFrameLatencyMs, maxFrameMs);
+                      minFrameMs = min(currentFrameLatencyMs, minFrameMs);
+                      totalDetectorMs += currentDetectorLatencyMs;
+                      maxDetectorMs = max(currentDetectorLatencyMs, maxDetectorMs);
+                      minDetectorMs = min(currentDetectorLatencyMs, minDetectorMs);
 
-              // Only log inference info once per second. When frameProcessedInOneSecondInterval is
-              // equal to 1, it means this is the first frame processed during the current second.
-              if (frameProcessedInOneSecondInterval == 1) {
-                Log.d(TAG, "Max latency is: " + maxRunMs);
-                Log.d(TAG, "Min latency is: " + minRunMs);
-                Log.d(TAG, "Num of Runs: " + numRuns + ", Avg latency is: " + totalRunMs / numRuns);
-                MemoryInfo mi = new MemoryInfo();
-                activityManager.getMemoryInfo(mi);
-                long availableMegs = mi.availMem / 0x100000L;
-                Log.d(TAG, "Memory available in system: " + availableMegs + " MB");
-              }
+                      // 추론 정보는 초당 한 번만 기록
+                      // frameProcessedInOneSecondInterval이 1이면 현재 두 번째 동안 처리 된 첫 번째 프레임임을 의미
+                      if (frameProcessedInOneSecondInterval == 1) {
+                        Log.d(TAG, "Num of Runs: " + numRuns);
+                        Log.d(
+                                TAG,
+                                "Frame latency: max="
+                                        + maxFrameMs
+                                        + ", min="
+                                        + minFrameMs
+                                        + ", avg="
+                                        + totalFrameMs / numRuns);
+                        Log.d(
+                                TAG,
+                                "Detector latency: max="
+                                        + maxDetectorMs
+                                        + ", min="
+                                        + minDetectorMs
+                                        + ", avg="
+                                        + totalDetectorMs / numRuns);
+                        MemoryInfo mi = new MemoryInfo();
+                        activityManager.getMemoryInfo(mi);
+                        long availableMegs = mi.availMem / 0x100000L;
+                        Log.d(TAG, "Memory available in system: " + availableMegs + " MB");
+                      }
 
-              graphicOverlay.clear();
-              if (originalCameraImage != null) {
-                graphicOverlay.add(new CameraImageGraphic(graphicOverlay, originalCameraImage));
-              }
-              graphicOverlay.add(
-                  new InferenceInfoGraphic(
-                      graphicOverlay, currentLatencyMs, shouldShowFps ? framesPerSecond : null));
-              VisionProcessorBase.this.onSuccess(results, graphicOverlay);
-              graphicOverlay.postInvalidate();
-            })
-        .addOnFailureListener(
-            executor,
-            e -> {
-              graphicOverlay.clear();
-              graphicOverlay.postInvalidate();
-              String error = "Failed to process. Error: " + e.getLocalizedMessage();
-              Toast.makeText(
-                      graphicOverlay.getContext(),
-                      error + "\nCause: " + e.getCause(),
-                      Toast.LENGTH_SHORT)
-                  .show();
-              Log.d(TAG, error);
-              e.printStackTrace();
-              VisionProcessorBase.this.onFailure(e);
-            });
+                      graphicOverlay.clear();
+                      if (originalCameraImage != null) {
+                        graphicOverlay.add(new CameraImageGraphic(graphicOverlay, originalCameraImage));
+                      }
+                      graphicOverlay.add(
+                              new InferenceInfoGraphic(
+                                      graphicOverlay,
+                                      currentFrameLatencyMs,
+                                      currentDetectorLatencyMs,
+                                      shouldShowFps ? framesPerSecond : null));
+                      VisionProcessorBase.this.onSuccess(results, graphicOverlay);
+                      graphicOverlay.postInvalidate();
+                    })
+            .addOnFailureListener(
+                    executor,
+                    e -> {
+                      graphicOverlay.clear();
+                      graphicOverlay.postInvalidate();
+                      String error = "Failed to process. Error: " + e.getLocalizedMessage();
+                      Toast.makeText(
+                              graphicOverlay.getContext(),
+                              error + "\nCause: " + e.getCause(),
+                              Toast.LENGTH_SHORT)
+                              .show();
+                      Log.d(TAG, error);
+                      e.printStackTrace();
+                      VisionProcessorBase.this.onFailure(e);
+                    });
   }
 
   @Override
@@ -242,7 +277,8 @@ public abstract class VisionProcessorBase<T> implements VisionImageProcessor {
     executor.shutdown();
     isShutdown = true;
     numRuns = 0;
-    totalRunMs = 0;
+    totalFrameMs = 0;
+    totalDetectorMs = 0;
     fpsTimer.cancel();
   }
 
