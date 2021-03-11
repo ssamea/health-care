@@ -141,6 +141,14 @@ APIs. -->
             android:exported="false">
         </activity>
 
+        <activity android:name=".BoardInsertActivity"/>
+        <activity android:name=".BoardDetailActivity"/>
+        <activity android:name=".Board_noticeActivity"/>
+        <activity android:name=".Board_mytitleActivity"/>
+        <activity android:name=".Board_popularActivity"/>
+        <activity android:name=".Board_totalActivity"/>
+        <activity android:name=".AiFoodCameraActivity"/>
+
 
     </application>
 
