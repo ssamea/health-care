@@ -5,8 +5,8 @@
 3. It can help you manage your diet today.
 
 ### 1. Initial Screen
-![1](https://user-images.githubusercontent.com/49589578/112152765-fbbbce80-8c25-11eb-9948-2f8ddfb00555.jpg){ height="300"}
-![2](https://user-images.githubusercontent.com/49589578/112152761-fb233800-8c25-11eb-9acd-b1e89f8c75c6.jpg){ height="300"}
+![1](https://user-images.githubusercontent.com/49589578/112152765-fbbbce80-8c25-11eb-9948-2f8ddfb00555.jpg){ height="100"}
+![2](https://user-images.githubusercontent.com/49589578/112152761-fb233800-8c25-11eb-9acd-b1e89f8c75c6.jpg){ height="100"}
 
 ### 2.Pedometer Function
 ![ped](https://user-images.githubusercontent.com/49589578/112153032-3a518900-8c26-11eb-8cbc-4c5792767bfb.jpg)
@@ -18,6 +18,7 @@
 
 ### 4. AI Trainer Using Deep Learning Function
 1. push up
+
 ![pushup](https://user-images.githubusercontent.com/49589578/112151304-6b30be80-8c24-11eb-88d3-d74173ec1a00.gif)
 
 2. squat
