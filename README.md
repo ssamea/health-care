@@ -25,7 +25,6 @@
 
 ### 5. User Community Board Functiom
 ![board1](https://user-images.githubusercontent.com/49589578/112150165-2193a400-8c23-11eb-888d-2cebc2ec9098.jpg)
-![b5](https://user-images.githubusercontent.com/49589578/112151151-42102e00-8c24-11eb-8cfe-dc42c4c67c33.jpg)
 ![b2](https://user-images.githubusercontent.com/49589578/112151154-43415b00-8c24-11eb-9601-e0080d19c807.jpg)
 ![b3](https://user-images.githubusercontent.com/49589578/112151155-43415b00-8c24-11eb-9478-13fd7d369e89.jpg)
 ![b4](https://user-images.githubusercontent.com/49589578/112151159-43d9f180-8c24-11eb-90e5-f6112819474a.jpg)
