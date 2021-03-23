@@ -5,8 +5,8 @@
 3. It can help you manage your diet today.
 
 ### 1. Initial Screen
-![1](https://user-images.githubusercontent.com/49589578/112152765-fbbbce80-8c25-11eb-9948-2f8ddfb00555.jpg){: width="100%" height="100%"}
-![2](https://user-images.githubusercontent.com/49589578/112152761-fb233800-8c25-11eb-9acd-b1e89f8c75c6.jpg){: width="100%" height="100%"}
+![1](https://user-images.githubusercontent.com/49589578/112152765-fbbbce80-8c25-11eb-9948-2f8ddfb00555.jpg)
+![2](https://user-images.githubusercontent.com/49589578/112152761-fb233800-8c25-11eb-9acd-b1e89f8c75c6.jpg)
 
 ### 2.Pedometer Function
 ![ped](https://user-images.githubusercontent.com/49589578/112153032-3a518900-8c26-11eb-8cbc-4c5792767bfb.jpg)
