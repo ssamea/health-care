@@ -22,6 +22,7 @@
 ![pushup](https://user-images.githubusercontent.com/49589578/112151304-6b30be80-8c24-11eb-88d3-d74173ec1a00.gif)
 
 2. squat
+![sqt](https://user-images.githubusercontent.com/49589578/112473827-33f01800-8db2-11eb-9d66-3a6b4cd467e6.jpg)
 
 ### 5. User Community Board Functiom
 ![board1](https://user-images.githubusercontent.com/49589578/112150165-2193a400-8c23-11eb-888d-2cebc2ec9098.jpg)
