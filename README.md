@@ -11,13 +11,17 @@
 </p>
 
 ### 2.Pedometer Function
+<p>
 <img src = "https://user-images.githubusercontent.com/49589578/112153032-3a518900-8c26-11eb-8cbc-4c5792767bfb.jpg" width="200px">
 <!--![ped](https://user-images.githubusercontent.com/49589578/112153032-3a518900-8c26-11eb-8cbc-4c5792767bfb.jpg)-->
+</p>
 
 ### 3. Daily Food Intake Nutritional Information Function
+<p>
 <img src = "ttps://user-images.githubusercontent.com/49589578/112152810-07a79080-8c26-11eb-9cc7-9a383b780d96.jpg" width="200px">
 <img src = "https://user-images.githubusercontent.com/49589578/112152815-08d8bd80-8c26-11eb-9230-bb0f5a52717f.jpg" width="200px">
 <img src = "https://user-images.githubusercontent.com/49589578/112152816-09715400-8c26-11eb-8d92-6eaa266d483a.jpg" width="200px">
+</p>
 
 <!--
 ![food](https://user-images.githubusercontent.com/49589578/112152810-07a79080-8c26-11eb-9cc7-9a383b780d96.jpg)
@@ -33,11 +37,14 @@
 2. squat
 <img src = "https://user-images.githubusercontent.com/49589578/112473827-33f01800-8db2-11eb-9d66-3a6b4cd467e6.jpg" width="200px">
 
+
 ### 5. User Community Board Functiom
+<p>
 <img src = "https://user-images.githubusercontent.com/49589578/112150165-2193a400-8c23-11eb-888d-2cebc2ec9098.jpg" width="200px">
 <img src = "https://user-images.githubusercontent.com/49589578/112151154-43415b00-8c24-11eb-9601-e0080d19c807.jpg" width="200px">
 <img src = "https://user-images.githubusercontent.com/49589578/112151155-43415b00-8c24-11eb-9478-13fd7d369e89.jpg" width="200px">
 <img src = "https://user-images.githubusercontent.com/49589578/112151159-43d9f180-8c24-11eb-90e5-f6112819474a.jpg" width="200px">
+<p>
 <!--
 ![board1](https://user-images.githubusercontent.com/49589578/112150165-2193a400-8c23-11eb-888d-2cebc2ec9098.jpg)
 ![b2](https://user-images.githubusercontent.com/49589578/112151154-43415b00-8c24-11eb-9601-e0080d19c807.jpg)
