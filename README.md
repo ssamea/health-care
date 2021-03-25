@@ -10,7 +10,8 @@
 
 
 ### 2.Pedometer Function
-![ped](https://user-images.githubusercontent.com/49589578/112153032-3a518900-8c26-11eb-8cbc-4c5792767bfb.jpg)
+<img src = "https://user-images.githubusercontent.com/49589578/112153032-3a518900-8c26-11eb-8cbc-4c5792767bfb.jpg" width="200px">
+<!--![ped](https://user-images.githubusercontent.com/49589578/112153032-3a518900-8c26-11eb-8cbc-4c5792767bfb.jpg)-->
 
 ### 3. Daily Food Intake Nutritional Information Function
 <img src = "ttps://user-images.githubusercontent.com/49589578/112152810-07a79080-8c26-11eb-9cc7-9a383b780d96.jpg" width="200px">
