@@ -179,13 +179,7 @@ dependencies {
     implementation "androidx.camera:camera-lifecycle:1.0.0-beta07"
     implementation "androidx.camera:camera-view:1.0.0-alpha14"
 
-<<<<<<< HEAD
 
-    //piechart
-=======
-    //piechart
-
->>>>>>> 21df40c15f55bcdf23d8fb1e5cfe99bcd0eb9f66
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
 
     implementation 'commons-io:commons-io:2.4'
