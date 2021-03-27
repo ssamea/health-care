@@ -26,9 +26,9 @@ public class RepetitionCounter {
     }
 
     /**
-     * Adds a new Pose classification result and updates reps for given class.
+     * 새로운 포즈 분류 결과를 추가하고 주어진 클래스의 담당자를 업데이트
      *
-     * @param classificationResult {link ClassificationResult} of class to confidence values.
+     * 클래스의 @param classificationResult {link ClassificationResult}를 신뢰 값에 연결
      * @return number of reps.
      */
     public int addClassificationResult(ClassificationResult classificationResult) {

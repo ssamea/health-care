@@ -34,7 +34,7 @@ public class PoseSample {
 
     public static PoseSample getPoseSample(String csvLine, String separator) {
         List<String> tokens = Splitter.onPattern(separator).splitToList(csvLine);
-        // Format is expected to be Name,Class,X1,Y1,Z1,X2,Y2,Z2...
+        // 형식은 Name, Class, X1, Y1, Z1, X2, Y2, Z2 ...
         // + 2 is for Name & Class.
         if (tokens.size() != (NUM_LANDMARKS * NUM_DIMS) + 2) {
             Log.e(TAG, "Invalid number of tokens for PoseSample");
@@ -43,7 +43,7 @@ public class PoseSample {
         String name = tokens.get(0);
         String className = tokens.get(1);
         List<PointF3D> landmarks = new ArrayList<>();
-        // Read from the third token, first 2 tokens are name and class.
+        // 세 번째 토큰에서 읽은 첫 번째 토큰 2 개는 이름과 클래스
         for (int i = 2; i < tokens.size(); i += NUM_DIMS) {
             try {
                 landmarks.add(

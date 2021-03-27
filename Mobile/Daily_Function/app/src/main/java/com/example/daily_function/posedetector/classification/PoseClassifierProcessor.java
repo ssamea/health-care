@@ -3,6 +3,7 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
 import android.os.Looper;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import androidx.annotation.WorkerThread;
 import com.google.common.base.Preconditions;
@@ -31,7 +32,10 @@ public class PoseClassifierProcessor {
     private List<RepetitionCounter> repCounters;
     private PoseClassifier poseClassifier;
     private String lastRepResult;
+    private TextToSpeech tts;              // TTS 변수 선언
+    private int cnt;
 
+    //초기화 및 포즈 샘플 로드
     @WorkerThread
     public PoseClassifierProcessor(Context context, boolean isStreamMode) {
         Preconditions.checkState(Looper.myLooper() != Looper.getMainLooper());
@@ -40,6 +44,7 @@ public class PoseClassifierProcessor {
             emaSmoothing = new EMASmoothing();
             repCounters = new ArrayList<>();
             lastRepResult = "";
+            cnt=0;
         }
         loadPoseSamples(context);
     }
@@ -51,7 +56,7 @@ public class PoseClassifierProcessor {
                     new InputStreamReader(context.getAssets().open(POSE_SAMPLES_FILE)));
             String csvLine = reader.readLine();
             while (csvLine != null) {
-                // If line is not a valid {@link PoseSample}, we'll get null and skip adding to the list.
+                // 행이 유효한 {@link PoseSample}이 아니면 null이 표시되고 목록에 추가하지 않음
                 PoseSample poseSample = PoseSample.getPoseSample(csvLine, ",");
                 if (poseSample != null) {
                     poseSamples.add(poseSample);
@@ -70,18 +75,18 @@ public class PoseClassifierProcessor {
     }
 
     /**
-     * Given a new {@link Pose} input, returns a list of formatted {@link String}s with Pose
-     * classification results.
+     * 새로운 {@link Pose} 입력이 주어지면 포즈 분류 결과와 함께 형식이 지정된 {@link String} 목록을 반환
      *
-     * <p>Currently it returns up to 2 strings as following:
-     * 0: PoseClass : X reps
-     * 1: PoseClass : [0.0-1.0] confidence
+     * 현재 다음과 같이 최대 2 개의 문자열을 반환
+     * 0 : PoseClass : 운동 횟수
+     * 1 : PoseClass : [0.0-1.0] 신뢰도
      */
     @WorkerThread
     public List<String> getPoseResult(Pose pose) {
         Preconditions.checkState(Looper.myLooper() != Looper.getMainLooper());
         List<String> result = new ArrayList<>();
         ClassificationResult classification = poseClassifier.classify(pose);
+        int cnt;
 
         // Update {@link RepetitionCounter}s if {@code isStreamMode}.
         if (isStreamMode) {
@@ -106,6 +111,7 @@ public class PoseClassifierProcessor {
                     break;
                 }
             }
+
             result.add(lastRepResult);
         }
 
