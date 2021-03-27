@@ -48,13 +48,11 @@ public class PoseClassifierProcessor {
             repCounters = new ArrayList<>();
             lastRepResult = "";
             cnt=0;
-            tts=new TextToSpeech(context.getApplicationContext(), new TextToSpeech.OnInitListener() {
-                @Override
-                public void onInit(int status) {
-                    if(status != ERROR) {
-                        // 언어를 선택한다.
-                        tts.setLanguage(Locale.KOREAN);
-                    }
+
+            tts=new TextToSpeech(context.getApplicationContext(), status -> {
+                if(status != ERROR) {
+                    // 언어를 선택한다.
+                    tts.setLanguage(Locale.KOREAN);
                 }
             });
         }
@@ -120,14 +118,21 @@ public class PoseClassifierProcessor {
                     lastRepResult = String.format(
                             Locale.KOREA, "%s : %d 개", repCounter.getClassName(), repsAfter);
 
-                    /*
-                    if(repsAfter==5){
+                    if(repCounter.getNumRepeats()==5){
+                        tts.setPitch(1.0f);// 음성 톤은 기본 설정
                         tts.setSpeechRate(1.0f);    // 읽는 속도는 기본 설정
                         // editText에 있는 문장을 읽는다.
                         tts.speak("세트를 달성하였습니다.",TextToSpeech.QUEUE_FLUSH, null);
-                    }
 
-                     */
+                    }
+                    /*
+                        // TTS 객체가 남아있다면 실행을 중지하고 메모리에서 제거한다.
+                    if(tts != null){
+                        tts.stop();
+                        tts.shutdown();
+                        tts = null;
+                     }
+                    */
 
                     break;
                 }
