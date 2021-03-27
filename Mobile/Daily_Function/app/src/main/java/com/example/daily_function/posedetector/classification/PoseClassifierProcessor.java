@@ -14,6 +14,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import static android.speech.tts.TextToSpeech.ERROR;
+
 public class PoseClassifierProcessor {
     private static final String TAG = "PoseClassifierProcessor";
     private static final String POSE_SAMPLES_FILE = "pose/fitness_pose_samples.csv";
@@ -35,6 +37,7 @@ public class PoseClassifierProcessor {
     private TextToSpeech tts;              // TTS 변수 선언
     private int cnt;
 
+
     //초기화 및 포즈 샘플 로드
     @WorkerThread
     public PoseClassifierProcessor(Context context, boolean isStreamMode) {
@@ -45,6 +48,15 @@ public class PoseClassifierProcessor {
             repCounters = new ArrayList<>();
             lastRepResult = "";
             cnt=0;
+            tts=new TextToSpeech(context.getApplicationContext(), new TextToSpeech.OnInitListener() {
+                @Override
+                public void onInit(int status) {
+                    if(status != ERROR) {
+                        // 언어를 선택한다.
+                        tts.setLanguage(Locale.KOREAN);
+                    }
+                }
+            });
         }
         loadPoseSamples(context);
     }
@@ -86,7 +98,6 @@ public class PoseClassifierProcessor {
         Preconditions.checkState(Looper.myLooper() != Looper.getMainLooper());
         List<String> result = new ArrayList<>();
         ClassificationResult classification = poseClassifier.classify(pose);
-        int cnt;
 
         // Update {@link RepetitionCounter}s if {@code isStreamMode}.
         if (isStreamMode) {
@@ -108,6 +119,16 @@ public class PoseClassifierProcessor {
                     tg.startTone(ToneGenerator.TONE_PROP_BEEP);
                     lastRepResult = String.format(
                             Locale.KOREA, "%s : %d 개", repCounter.getClassName(), repsAfter);
+
+                    /*
+                    if(repsAfter==5){
+                        tts.setSpeechRate(1.0f);    // 읽는 속도는 기본 설정
+                        // editText에 있는 문장을 읽는다.
+                        tts.speak("세트를 달성하였습니다.",TextToSpeech.QUEUE_FLUSH, null);
+                    }
+
+                     */
+
                     break;
                 }
             }

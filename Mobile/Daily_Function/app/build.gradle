@@ -177,6 +177,16 @@ dependencies {
     implementation "androidx.camera:camera-lifecycle:1.0.0-beta07"
     implementation "androidx.camera:camera-view:1.0.0-alpha14"
 
+//piechart
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
+
+    implementation 'commons-io:commons-io:2.4'
+
+    // Dependency FirebaseUI for Firebase Realtime Database
+    implementation 'com.firebaseui:firebase-ui-database:6.2.1'
+
+    // Dependency for Firebase REaltime Database
+    implementation 'com.google.firebase:firebase-database:19.3.1'
 
 
 

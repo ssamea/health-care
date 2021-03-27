@@ -103,7 +103,7 @@
                     android:layout_weight="1"
                     android:id="@+id/imageView"
                     android:scaleType="centerInside"
-                    android:background="@drawable/xml_border">
+                    android:background="#eeeeee">
                     </ImageView>
 
 

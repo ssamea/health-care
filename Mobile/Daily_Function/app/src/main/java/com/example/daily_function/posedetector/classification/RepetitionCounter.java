@@ -41,6 +41,11 @@ public class RepetitionCounter {
 
         if (poseConfidence < exitThreshold) {
             numRepeats++;
+
+            // 12개 되면 초기화
+            if(numRepeats==6)
+                numRepeats=0;
+
             poseEntered = false;
         }
 
