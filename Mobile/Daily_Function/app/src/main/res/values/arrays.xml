@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+   <string-array name="board_array">
+    <item>제목</item>
+    <item>작성자</item>
+    <item>제목+작성자</item>
+  </string-array>
+  
   <string-array name="pref_entries_face_detector_landmark_mode">
     <item>@string/pref_entries_face_detector_landmark_mode_no_landmarks</item>
     <item>@string/pref_entries_face_detector_landmark_mode_all_landmarks</item>
