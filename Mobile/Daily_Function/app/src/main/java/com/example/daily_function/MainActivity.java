@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity{
     Button AiExecBtn; // Ai 운동
     Button BoardBtn; //게시판
     Button ProfileBtn; //프로필
+    Button CameraBtn; //ai카메라
 
     ProgressBar step_progressBar; //발걸음 프로그래스 바
     ProgressBar kcal_progressBar;
@@ -252,7 +253,17 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                Intent intent = new Intent(getApplicationContext(), Board.class);
+                Intent intent = new Intent(getApplicationContext(), BoardActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        CameraBtn=(Button)findViewById(R.id.CameraMv);
+        CameraBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                Intent intent = new Intent(getApplicationContext(), AiFoodCameraActivity.class);
                 startActivity(intent);
             }
         });

@@ -13,11 +13,17 @@ import java.util.ArrayList;
 
 public class BoardDataAdapter extends BaseAdapter implements Filterable {
 
+
+
     /* 아이템을 세트로 담기 위한 어레이리스트 */
     private ArrayList<BoardData> Boards = new ArrayList<>();
     // 필터링된 결과 데이터를 저장하기 위한 ArrayList. 최초에는 전체 리스트 보유.
     private ArrayList<BoardData> filteredItemList = Boards ;
     Filter listFilter ;
+
+    public BoardDataAdapter(){
+
+    }
 
     @Override
     public int getCount() {
@@ -93,6 +99,7 @@ public class BoardDataAdapter extends BaseAdapter implements Filterable {
         return listFilter ;
     }
 
+    //검색 기능을 위한 필터 설정
     private class ListFilter extends Filter {
 
         @Override
@@ -107,7 +114,7 @@ public class BoardDataAdapter extends BaseAdapter implements Filterable {
 
                 for (BoardData item : Boards) {
                     if (item.getTitle().toUpperCase().contains(constraint.toString().toUpperCase()) ||
-                            item.getId().toUpperCase().contains(constraint.toString().toUpperCase()))
+                            item.getContent().toUpperCase().contains(constraint.toString().toUpperCase()))
                     {
                         itemList.add(item) ;
                     }
