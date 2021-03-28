@@ -87,6 +87,8 @@
                 android:padding="16dp"
                 android:text="내용"/>
 
+
+
             <TextView
                 android:id="@+id/content_tv"
                 android:padding="16dp"
