@@ -188,7 +188,7 @@ public class BoardActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent board =new Intent(getApplicationContext(), MainActivity.class);
+        Intent board =new Intent(getApplicationContext(),MainActivity.class);
         startActivity(board);
         finish();
     }

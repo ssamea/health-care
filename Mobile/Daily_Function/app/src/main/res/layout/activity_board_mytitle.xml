@@ -26,110 +26,60 @@
             android:layout_height="wrap_content">
             <TextView
                 android:id="@+id/toolbar_title"
-                android:text="전체 글 목록"
+                android:text="내 글 목록"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center" />
         </androidx.appcompat.widget.Toolbar>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:orientation="horizontal"
-            android:layout_below="@+id/toolbar"
-            android:id="@+id/title_line"
-            >
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/board_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="제목" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/board_hit"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="조회수" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-                <TextView
-                    android:id="@+id/board_get"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="좋아요" />
-            </LinearLayout>
-
-
-        </LinearLayout>
-
-
         <ScrollView
             android:id="@+id/scroll_view"
             android:layout_width="match_parent"
             android:layout_height="495dp"
-            android:layout_below="@+id/title_line"
+            android:layout_below="@+id/toolbar"
             android:layout_marginTop="5dp"
             android:fillViewport="true"
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="8dp">
 
-
-            <ListView
-                android:id="@+id/board_list_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:dividerHeight="0px"
-                android:divider="#FFFFFF"
-                >
-
-            </ListView>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="405dp"
+                android:layout_height="572dp"
+                android:scrollbars="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </ScrollView>
 
 
 
-
-        <EditText
-            android:id="@+id/search_edit"
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"
+        <!--
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchView"
+            android:layout_width="wrap_content"
+            android:layout_height="?attr/actionBarSize"
             android:layout_below="@+id/scroll_view"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="-269dp"
-            android:hint="검색 할 내용"
-            android:inputType="text" />
+            app:queryHint="게시판 검색"
+            android:padding="10dp"
+            android:layout_margin="5dp"
+            />
+
 
         <Button
             android:id="@+id/btn_search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/scroll_view"
-            android:layout_alignRight="@+id/search_edit"
+            android:layout_alignRight="@+id/searchView"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="15dp"
-            android:layout_marginRight="-108dp"
+            android:layout_marginRight="-101dp"
             android:background="#AFEEEE"
             android:text="검색" />
+            -->
 
         <Button
             android:id="@+id/btn_insert"
@@ -137,9 +87,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/scroll_view"
             android:layout_alignRight="@+id/btn_search"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="-108dp"
+            android:layout_marginLeft="300dp"
+            android:layout_marginTop="13dp"
+            android:layout_marginRight="-101dp"
             android:background="#AFEEEE"
             android:text="새 글쓰기" />
 
