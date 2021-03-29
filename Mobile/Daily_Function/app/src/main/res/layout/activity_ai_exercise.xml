@@ -17,7 +17,8 @@
             android:id="@+id/btn_AiTrainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="AI와 함께하는 운동"
+            android:text="AI 홈 트레이닝"
+            android:gravity ="left"
             android:textColor="@color/black"/>
 
         <Button
@@ -25,6 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="AI와 함께하는 자세 교정"
+            android:gravity ="left"
             android:textColor="@color/black" />
 
     </LinearLayout>
