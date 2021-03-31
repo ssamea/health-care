@@ -118,7 +118,7 @@ public class PoseClassifierProcessor {
                     lastRepResult = String.format(
                             Locale.KOREA, "%s : %d 개", repCounter.getClassName(), repsAfter);
 
-                    if(repCounter.getNumRepeats()==5){
+                    if(repCounter.getNumRepeats()==12){
                         tts.setPitch(1.0f);// 음성 톤은 기본 설정
                         tts.setSpeechRate(1.0f);    // 읽는 속도는 기본 설정
                         // editText에 있는 문장을 읽는다.

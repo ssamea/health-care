@@ -43,7 +43,7 @@ public class RepetitionCounter {
             numRepeats++;
 
             // 12개 되면 초기화
-            if(numRepeats==6)
+            if(numRepeats==12)
                 numRepeats=0;
 
             poseEntered = false;
