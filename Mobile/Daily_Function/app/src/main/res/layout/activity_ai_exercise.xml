@@ -25,7 +25,7 @@
             android:id="@+id/btn_Analyze_Pose"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="AI와 함께하는 자세 교정"
+            android:text="AI 식단 추천"
             android:gravity ="left"
             android:textColor="@color/black" />
 
